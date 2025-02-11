@@ -1,0 +1,155 @@
+{{ define "index" }}
+<div class="container-fluid">
+  <div class="card card-body py-3">
+    <div class="row align-items-center">
+      <div class="col-12">
+        <div class="d-sm-flex align-items-center justify-space-between">
+          <h4 class="mb-4 mb-sm-0 card-title">Create Category</h4>
+          <nav aria-label="breadcrumb" class="ms-auto">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item d-flex align-items-center">
+                <a class="text-muted text-decoration-none d-flex" href="">
+                  <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                </a>
+              </li>
+              <li class="breadcrumb-item" aria-current="page">
+                <a href="/admin/categories">
+                  <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">
+                    All Category
+                  </span>
+                </a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Category Form</h4>
+          <form id="categoryForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Name Category" />
+                  <label for="tb-fname">Name Category</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug Category" readonly
+                    style="pointer-events: none; background-color: #e9ecef; cursor: not-allowed;" />
+                  <label for="tb-fname">Slug Category</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="parent_id">Chọn danh mục cha:</label>
+                  <select class="form-select" id="parent_id" name="parent_id">
+                    <option value="">----------------Chọn Danh Mục Cha---------------</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="d-md-flex align-items-center">
+                  <div class="ms-auto mt-3 mt-md-0">
+                    <button type="submit" class="btn btn-primary hstack gap-6">
+                      <i class="ti ti-send fs-4"></i>
+                      Create Category
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const nameInput = document.querySelector('input[name="name"]');
+    const slugInput = document.querySelector('input[name="slug"]');
+
+    nameInput.addEventListener("input", function () {
+      let slug = nameInput.value
+        .toLowerCase() // Chuyển thành chữ thường
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Xóa dấu tiếng Việt
+        .replace(/đ/g, "d").replace(/Đ/g, "D") // Chuyển đ -> d
+        .replace(/\s+/g, "-") // Thay khoảng trắng bằng dấu '-'
+        .replace(/[^a-z0-9-]/g, "") // Xóa ký tự đặc biệt
+        .replace(/-+/g, "-") // Xóa dấu '-' dư thừa
+        .trim(); // Xóa khoảng trắng dư thừa
+
+      slugInput.value = slug;
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Lấy danh sách danh mục cha
+    fetch("/admin/categories/getParentCategory")
+    .then(response => response.json())
+        .then(data => {
+            let parentSelect = document.getElementById("parent_id");
+            parentSelect.innerHTML = '<option value="">----------------Chọn Danh Mục Cha---------------</option>';
+            data.forEach(category => {
+                parentSelect.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+            });
+        })
+        .catch(error => console.error("Lỗi khi lấy danh mục:", error));
+
+    // Xử lý sự kiện submit form
+    document.getElementById("categoryForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      
+      let formData = {
+        name: document.getElementById("name").value,
+        slug: document.getElementById("slug").value,
+        parent_id: document.getElementById("parent_id").value || null,
+      };
+
+      fetch("/admin/categories/createCategory", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            Swal.fire({
+              icon: "success",
+              title: "Thành công!",
+              text: data.message,
+              timer: 2000,
+              showConfirmButton: false,
+              allowOutsideClick: false,
+            }).then(() => {
+              location.reload(); // Load lại danh mục cha
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Lỗi!",
+              text: data.error || "Có lỗi xảy ra khi thêm danh mục",
+            });
+          }
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: "error",
+            title: "Lỗi!",
+            text: "Có lỗi xảy ra khi thêm danh mục",
+          });
+        });
+    });
+  });
+</script>
+{{ end }}

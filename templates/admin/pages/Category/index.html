@@ -1,0 +1,288 @@
+{{ define "index" }}
+<div class="container-fluid">
+  <div class="card card-body py-3">
+    <div class="row align-items-center">
+      <div class="col-12">
+        <div class="d-sm-flex align-items-center justify-space-between">
+          <h4 class="mb-4 mb-sm-0 card-title">Danh Mục API</h4>
+          <nav aria-label="breadcrumb" class="ms-auto">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item d-flex align-items-center">
+                <a class="text-muted text-decoration-none d-flex" href="./">
+                  <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="/admin/categories/create">
+                  <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">
+                    Create Category
+                  </span>
+                </a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="datatables">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <a href="/admin/categories/create" class="btn btn-primary">
+            <i class="ti ti-plus fs-4"></i>&nbsp; Add Category
+          </a>
+          <div class="position-relative" style="flex-grow: 1; max-width: 300px;">
+            <input type="text" class="form-control" placeholder="Search categories..." id="categorySearch">
+            <ul class="list-group position-absolute w-100 shadow mt-1 rounded" id="searchResults" style="display: none; z-index: 1000;"></ul>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table id="t_add_row" class="table table-striped w-100 table-bordered display text-nowrap">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Parent</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="categories-table-body"></tbody>
+          </table>
+
+          <div id="pagination">
+            <button id="prevPage" class="btn btn-secondary" disabled>Previous</button>
+            <span id="pageNumber">1</span>
+            <button id="nextPage" class="btn btn-secondary">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCategoryModalLabel">Chỉnh Sửa Danh Mục</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editCategoryForm">
+          <input type="hidden" id="editCategoryId" name="id">
+          <div class="mb-3">
+            <label for="editCategoryName" class="form-label">Tên danh mục</label>
+            <input type="text" class="form-control" id="editCategoryName" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="editCategorySlug" class="form-label">Slug danh mục</label>
+            <input type="text" style="pointer-events: none; background-color: #e9ecef; cursor: not-allowed;" class="form-control" id="editCategorySlug" name="slug" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="editCategoryParent" class="form-label">Danh mục cha</label>
+            <div id="parentCategoryContainer">
+              <span id="parentCategoryText" class="form-control"></span>
+              <select class="form-select d-none" id="editCategoryParent" name="parent_id"></select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let currentPage = 1;
+  const limit = 5;
+  let allCategories = [];
+
+  function fetchCategories(page = 1) {
+    fetch(`/admin/categories/indexCategory?page=${page}&limit=${limit}`)
+      .then(response => response.json())
+      .then(data => {
+        allCategories = data.categories;
+        const tableBody = document.getElementById("categories-table-body");
+        tableBody.innerHTML = "";
+
+        data.categories.forEach(category => {
+          let parentName = category.parent_id ? data.categories.find(cat => cat.id === category.parent_id)?.name || "Không có" : "Không có";
+          const row = `
+            <tr>
+              <td>${category.id}</td>
+              <td>${category.name}</td>
+              <td>${category.slug}</td>
+              <td>${parentName}</td>
+              <td>
+                <button class="btn btn-warning" onclick="editCategory(${category.id}, '${category.name}', '${category.slug}', ${category.parent_id})">Edit</button>
+                <button class="btn btn-danger" onclick="deleteCategory(${category.id})">Delete</button>
+              </td>
+            </tr>`;
+          tableBody.insertAdjacentHTML("beforeend", row);
+        });
+      })
+      .catch(error => console.error("Lỗi khi tải danh mục:", error));
+  }
+
+  window.editCategory = function (id, name, slug, parentId) {
+    document.getElementById("editCategoryId").value = id;
+    document.getElementById("editCategoryName").value = name;
+    document.getElementById("editCategorySlug").value = slug;
+
+    const parentText = document.getElementById("parentCategoryText");
+    const parentSelect = document.getElementById("editCategoryParent");
+    parentText.textContent = allCategories.find(cat => cat.id === parentId)?.name || "Không có";
+    parentSelect.innerHTML = '<option value="">----------------Chọn Danh Mục Cha---------------</option>' +
+    allCategories.map(cat => `<option value="${cat.id}" ${cat.id === parentId ? 'selected' : ''}>${cat.name}</option>`).join('');
+    
+    parentText.classList.remove("d-none");
+    parentSelect.classList.add("d-none");
+    
+    parentText.addEventListener("click", function () {
+      parentText.classList.add("d-none");
+      parentSelect.classList.remove("d-none");
+    });
+
+    new bootstrap.Modal(document.getElementById("editCategoryModal")).show();
+  };
+
+  fetchCategories(currentPage);
+});
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const nameInput = document.querySelector('input[name="name"]');
+    const slugInput = document.querySelector('input[name="slug"]');
+
+    nameInput.addEventListener("input", function () {
+      let slug = nameInput.value
+        .toLowerCase() // Chuyển thành chữ thường
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Xóa dấu tiếng Việt
+        .replace(/đ/g, "d").replace(/Đ/g, "D") // Chuyển đ -> d
+        .replace(/\s+/g, "-") // Thay khoảng trắng bằng dấu '-'
+        .replace(/[^a-z0-9-]/g, "") // Xóa ký tự đặc biệt
+        .replace(/-+/g, "-") // Xóa dấu '-' dư thừa
+        .trim(); // Xóa khoảng trắng dư thừa
+
+      slugInput.value = slug;
+    });
+  });
+</script>
+<script>
+  document.getElementById("editCategoryForm").addEventListener("submit", async function(event) {
+      event.preventDefault(); // Ngăn chặn reload trang
+  
+      const categoryId = document.getElementById("editCategoryId").value;
+      const name = document.getElementById("editCategoryName").value;
+      const slug = document.getElementById("editCategorySlug").value;
+      const parentId = document.getElementById("editCategoryParent").value || null;
+  
+      if (!categoryId) {
+          Swal.fire({
+              icon: "error",
+              title: "Lỗi!",
+              text: "Không tìm thấy ID danh mục!"
+          });
+          return;
+      }
+  
+      try {
+          const response = await fetch(`/admin/categories/updateCategory/${categoryId}`, {
+              method: "PUT",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                  id: Number(categoryId),
+                  name: name,
+                  slug: slug,
+                  parent_id: parentId ? Number(parentId) : null
+              })
+          });
+  
+          const result = await response.json();
+  
+          if (response.ok) {
+              Swal.fire({
+                  icon: "success",
+                  title: "Thành công!",
+                  text: result.message,
+                  timer: 2000,
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              }).then(() => {
+                  location.reload(); // Reload sau khi thông báo
+              });
+          } else {
+              Swal.fire({
+                  icon: "error",
+                  title: "Lỗi!",
+                  text: result.message
+              });
+          }
+      } catch (error) {
+          console.error("Lỗi khi gửi yêu cầu:", error);
+          Swal.fire({
+              icon: "error",
+              title: "Lỗi!",
+              text: "Có lỗi xảy ra, vui lòng thử lại sau."
+          });
+      }
+  });
+  </script>
+  <script>
+    async function deleteCategory(categoryId) {
+        Swal.fire({
+            title: "Bạn có chắc chắn?",
+            text: "Hành động này sẽ xóa danh mục vĩnh viễn!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Xóa ngay!",
+            cancelButtonText: "Hủy"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`/admin/categories/deleteCategory/${categoryId}`, {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" }
+                    });
+    
+                    const result = await response.json();
+    
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Thành công!",
+                            text: result.message,
+                            timer: 2000,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                        }).then(() => {
+                            location.reload(); // Reload lại danh sách
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi!",
+                            text: result.message
+                        });
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi gửi yêu cầu:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi!",
+                        text: "Có lỗi xảy ra, vui lòng thử lại sau."
+                    });
+                }
+            }
+        });
+    }
+    </script>
+{{ end }}

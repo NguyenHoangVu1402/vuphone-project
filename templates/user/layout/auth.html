@@ -16,7 +16,16 @@
     <meta property=og:image:width content=200>
     <meta property=og:image:height content=200>
     <link rel=stylesheet href="/static/user/css/RegisterAccount.Head.styles.css">
-    <link rel=stylesheet href="/static/user/css/Login.Head.styles.css">
+<script src="/static/user/js/RegisterAccount.Head.scripts.js"></script>
+<script src="/static/user/js/RegisterAccount.Footer.scripts.js"></script>
+<link rel=stylesheet href="/static/user/css/Login.Head.styles.css">
+<script src="/static/user/js/Login.Head.scripts.js"></script>
+<script src="/static/user/js/Login.Footer.scripts.js"></script>
+<link rel="stylesheet" href="/static/user/css/PasswordRecovery.Head.styles.css">
+<script src="/static/user/js/PasswordRecovery.Footer.scripts.js"></script>
+<script src="/static/user/js/PasswordRecovery.Head.scripts.js"></script>
+
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5D8BL4TW"></script>
     <script>
         function gtag() {
@@ -27,8 +36,8 @@
         gtag("config", "G-DJ5D8BL4TW")
     </script>
     <link rel="shortcut icon" href=/static/user/images/icons/favicon.ico>
-    <script src="/static/user/js/RegisterAccount.Head.scripts.js"></script>
-    <script src="/static/user/js/Login.Head.scripts.js"></script>
+    
+    
 
 <body>
     <div class="item-loading global-busy"></div><noscript><iframe
@@ -132,9 +141,9 @@
                     <ul class="top-menu mobile">
                         <div class=header-links>
                             <ul class=popup-header-links>
-                                <li class=li_ico-register><a href="/register?returnUrl=%2Fcart" class=ico-register>Tạo
+                                <li class=li_ico-register><a href="/registervuphone" class=ico-register>Tạo
                                         tài khoản ngay</a>
-                                <li class=li_ico-login><a href="/login?returnUrl=%2Fcart" class=ico-login>Đăng nhập</a>
+                                <li class=li_ico-login><a href="/loginvuphone" class=ico-login>Đăng nhập</a>
                                 <li class=li_ico-wishlist><a href=/wishlist class=ico-wishlist> <span
                                             class=wishlist-label>Danh sách yêu thích</span> <span
                                             class=wishlist-qty>(0)</span> </a>
@@ -516,32 +525,7 @@
                                 margin-right: 10px
                             }
                         </style>
-                        <div class=language-selector>
-                            <div class=icon-language><i class="fa-regular fa-globe"></i></div>
-                            <div><a style=font-size:16px;margin-left:8px;color:#1d1d1f ; data-toggle=collapse
-                                    href=#collapseExample aria-expanded=false> Ngôn ngữ <button class=ic_lg_show
-                                        onclick=myFunction()></button> </a></div>
-                            <div style=line-height:24px;margin-left:24px class=collapse id=collapseExample>
-                                <ul style=margin-top:8px;margin-bottom:1px class=cl-language-list>
-                                    <li class=lang-li-ddl><img title="Tiếng Việt " alt="Tiếng Việt " class=selected
-                                            src=/images/flags/vn.png> <a style=font-size:14px;font-weight:400
-                                            href="https://shopdunk.com/changelanguage/2?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                            class=cl-lang-active>Ti&#x1EBF;ng Vi&#x1EC7;t </a>
-                                    <li class=lang-li-ddl><img title=English alt=English src=/images/flags/us.png> <a
-                                            style=font-size:14px;font-weight:400
-                                            href="https://shopdunk.com/changelanguage/1?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart">English</a>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class=language-selector-flags>
-                            <div class=flag><a
-                                    href="https://shopdunk.com/changelanguage/2?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                    title="Tiếng Việt "> <img title="Tiếng Việt " alt="Tiếng Việt " class=selected
-                                        src=/images/flags/vn.png> </a></div>
-                            <div class=flag><a
-                                    href="https://shopdunk.com/changelanguage/1?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                    title=English> <img title=English alt=English src=/images/flags/us.png> </a></div>
-                        </div>
+                        
                     </ul>
                 </div>
                 <div class="languague-flag mobile">
@@ -561,40 +545,15 @@
                             margin-right: 10px
                         }
                     </style>
-                    <div class=language-selector>
-                        <div class=icon-language><i class="fa-regular fa-globe"></i></div>
-                        <div><a style=font-size:16px;margin-left:8px;color:#1d1d1f ; data-toggle=collapse
-                                href=#collapseExample aria-expanded=false> Ngôn ngữ <button class=ic_lg_show
-                                    onclick=myFunction()></button> </a></div>
-                        <div style=line-height:24px;margin-left:24px class=collapse id=collapseExample>
-                            <ul style=margin-top:8px;margin-bottom:1px class=cl-language-list>
-                                <li class=lang-li-ddl><img title="Tiếng Việt " alt="Tiếng Việt " class=selected
-                                        src=/images/flags/vn.png> <a style=font-size:14px;font-weight:400
-                                        href="https://shopdunk.com/changelanguage/2?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                        class=cl-lang-active>Ti&#x1EBF;ng Vi&#x1EC7;t </a>
-                                <li class=lang-li-ddl><img title=English alt=English src=/images/flags/us.png> <a
-                                        style=font-size:14px;font-weight:400
-                                        href="https://shopdunk.com/changelanguage/1?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart">English</a>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class=language-selector-flags>
-                        <div class=flag><a
-                                href="https://shopdunk.com/changelanguage/2?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                title="Tiếng Việt "> <img title="Tiếng Việt " alt="Tiếng Việt " class=selected
-                                    src=/images/flags/vn.png> </a></div>
-                        <div class=flag><a
-                                href="https://shopdunk.com/changelanguage/1?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                title=English> <img title=English alt=English src=/images/flags/us.png> </a></div>
-                    </div>
+                    
                 </div>
                 <div class=header-links-wrapper>
                     <div class=search-icon></div>
                     <div class=header-links>
                         <ul class=popup-header-links>
-                            <li class=li_ico-register><a href="/register?returnUrl=%2Fcart" class=ico-register>Tạo tài
+                            <li class=li_ico-register><a href="/registervuphone" class=ico-register>Tạo tài
                                     khoản ngay</a>
-                            <li class=li_ico-login><a href="/login?returnUrl=%2Fcart" class=ico-login>Đăng nhập</a>
+                            <li class=li_ico-login><a href="/loginvuphone" class=ico-login>Đăng nhập</a>
                             <li class=li_ico-wishlist><a href=/wishlist class=ico-wishlist> <span
                                         class=wishlist-label>Danh sách yêu thích</span> <span
                                         class=wishlist-qty>(0)</span> </a>
@@ -602,7 +561,7 @@
                                     <span class=cart-qty>0</span> </a>
                         </ul>
                     </div>
-                    <div class=login-icon><a href=/customer/info><img src=static/images/icons/login.png
+                    <div class=login-icon><a href=/customer/info><img src=/static/user/images/icons/login.png
                                 alt=login-icon></a></div>
                     <div class="languague-flag desktop">
                         <style>
@@ -621,40 +580,15 @@
                                 margin-right: 10px
                             }
                         </style>
-                        <div class=language-selector>
-                            <div class=icon-language><i class="fa-regular fa-globe"></i></div>
-                            <div><a style=font-size:16px;margin-left:8px;color:#1d1d1f ; data-toggle=collapse
-                               href=#collapseExample aria-expanded=false> Ngôn ngữ <button class=ic_lg_show
-                               onclick=myFunction()></button> </a></div>
-                            <div style=line-height:24px;margin-left:24px class=collapse id=collapseExample>
-                               <ul style=margin-top:8px;margin-bottom:1px class=cl-language-list>
-                                  <li class=lang-li-ddl><img title="Tiếng Việt " alt="Tiếng Việt " class=selected
-                                     src=/static/user/images/flags/vn.png> <a style=font-size:14px;font-weight:400
-                                     href="https://shopdunk.com/changelanguage/2?returnUrl=%2F"
-                                     class=cl-lang-active>Ti&#x1EBF;ng Vi&#x1EC7;t </a>
-                                  <li class=lang-li-ddl><img title=English alt=English src=/static/user/images/flags/us.png> <a
-                                     style=font-size:14px;font-weight:400
-                                     href="">English</a>
-                               </ul>
-                            </div>
-                         </div>
-                        <div class=language-selector-flags>
-                            <div class=flag><a
-                                    href="https://shopdunk.com/changelanguage/2?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                    title="Tiếng Việt "> <img title="Tiếng Việt " alt="Tiếng Việt " class=selected
-                                        src=/static/user/images/flags/vn.png> </a></div>
-                            <div class=flag><a
-                                    href="https://shopdunk.com/changelanguage/1?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                    title=English> <img title=English alt=English src=/static/user/images/flags/us.png> </a></div>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class=account-desktop>
                     <div class=header-links>
                         <ul class=popup-header-links>
-                            <li class=li_ico-register><a href="/register?returnUrl=%2Fcart" class=ico-register>Tạo tài
+                            <li class=li_ico-register><a href="/registervuphone" class=ico-register>Tạo tài
                                     khoản ngay</a>
-                            <li class=li_ico-login><a href="/login?returnUrl=%2Fcart" class=ico-login>Đăng nhập</a>
+                            <li class=li_ico-login><a href="/loginvuphone" class=ico-login>Đăng nhập</a>
                             <li class=li_ico-wishlist><a href=/wishlist class=ico-wishlist> <span
                                         class=wishlist-label>Danh sách yêu thích</span> <span
                                         class=wishlist-qty>(0)</span> </a>
@@ -734,9 +668,9 @@
                 <ul class="top-menu mobile">
                     <div class=header-links>
                         <ul class=popup-header-links>
-                            <li class=li_ico-register><a href="/register?returnUrl=%2Fcart" class=ico-register>Tạo tài
+                            <li class=li_ico-register><a href="/registervuphone" class=ico-register>Tạo tài
                                     khoản ngay</a>
-                            <li class=li_ico-login><a href="/login?returnUrl=%2Fcart" class=ico-login>Đăng nhập</a>
+                            <li class=li_ico-login><a href="/loginvuphone" class=ico-login>Đăng nhập</a>
                             <li class=li_ico-wishlist><a href=/wishlist class=ico-wishlist> <span
                                         class=wishlist-label>Danh sách yêu thích</span> <span
                                         class=wishlist-qty>(0)</span> </a>
@@ -1102,32 +1036,7 @@
                             margin-right: 10px
                         }
                     </style>
-                    <div class=language-selector>
-                        <div class=icon-language><i class="fa-regular fa-globe"></i></div>
-                        <div><a style=font-size:16px;margin-left:8px;color:#1d1d1f ; data-toggle=collapse
-                                href=#collapseExample aria-expanded=false> Ngôn ngữ <button class=ic_lg_show
-                                    onclick=myFunction()></button> </a></div>
-                        <div style=line-height:24px;margin-left:24px class=collapse id=collapseExample>
-                            <ul style=margin-top:8px;margin-bottom:1px class=cl-language-list>
-                                <li class=lang-li-ddl><img title="Tiếng Việt " alt="Tiếng Việt " class=selected
-                                        src=/static/user/images/flags/vn.png> <a style=font-size:14px;font-weight:400
-                                        href="https://shopdunk.com/changelanguage/2?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                        class=cl-lang-active>Ti&#x1EBF;ng Vi&#x1EC7;t </a>
-                                <li class=lang-li-ddl><img title=English alt=English src=/static/user/images/flags/us.png> <a
-                                        style=font-size:14px;font-weight:400
-                                        href="https://shopdunk.com/changelanguage/1?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart">English</a>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class=language-selector-flags>
-                        <div class=flag><a
-                                href="https://shopdunk.com/changelanguage/2?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                title="Tiếng Việt "> <img title="Tiếng Việt " alt="Tiếng Việt " class=selected
-                                    src=/static/user/images/flags/vn.png> </a></div>
-                        <div class=flag><a
-                                href="https://shopdunk.com/changelanguage/1?returnUrl=%2Fregister%3FreturnUrl%3D%252Fcart"
-                                title=English> <img title=English alt=English src=/static/user/images/flags/us.png> </a></div>
-                    </div>
+                    
                 </ul>
             </div>
         </div>
@@ -1307,8 +1216,8 @@
             </div>
         </div>
     </div>
-    <script src="/static/user/js/RegisterAccount.Footer.scripts.js"></script>
-    <script src="/static/user/js/Login.Footer.scripts.js"></script>
+    
+    
     <script>
         $("#small-search-box-form").on("submit", function (n) {
             $("#small-searchterms").focus();

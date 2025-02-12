@@ -8,9 +8,12 @@ import (
 // Cấu hình router cho home
 func LoginRoutes(r *gin.Engine) {
 	r.GET("/loginvuphone", func(c *gin.Context) {
-		utils.RenderTemplateAuth(c, "login", "Login VuPhone")
+		utils.RenderTemplateAuth(c, "login", "Đăng nhập VuPhone")
 	})
 	r.GET("/registervuphone", func(c *gin.Context) {
-		utils.RenderTemplateAuth(c, "register", "Register VuPhone")
+		utils.RenderTemplateAuth(c, "register", "Đăng ký VuPhone")
+	})
+	r.GET("/passwordrecoveryvuphone", func(c *gin.Context) {
+		utils.RenderTemplateAuth(c, "passwordrecovery", "Khôi phục mật khẩu VuPhone")
 	})
 } 

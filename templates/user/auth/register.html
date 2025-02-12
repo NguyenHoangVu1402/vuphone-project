@@ -22,10 +22,7 @@
                             <div class="fieldset">
                                 <div class="page-title"><h1>Đăng ký</h1></div>
                                 <div class="form-fields">
-                                    <div class="inputs first_name">
-                                        <label for="ReferralCode">Mã giới thiệu:</label> <input type="text" id="ReferralCode" name="ReferralCode" />
-                                        <span class="field-validation-valid" data-valmsg-for="ReferralCode" data-valmsg-replace="true"></span>
-                                    </div>
+                                    
                                     <div class="inputs first_name">
                                         <label for="FirstName">Tên, Họ:</label> <input type="text" data-val="true" data-val-required="Trường bắt buộc." id="FirstName" name="FirstName" /> <span class="required">*</span>
                                         <span class="field-validation-valid" data-valmsg-for="FirstName" data-valmsg-replace="true"></span>
@@ -291,7 +288,7 @@
                                 </label>
                             </div>
                             <div class="buttons"><button type="submit" name="register-button" id="register-button" class="button-1 register-next-step-button">Đăng ký</button></div>
-                            <div class="buttons-forgot"><label> Bạn đã có tài khoản? </label> <a href="/login" class="link_access">đăng nhập ngay</a></div>
+                            <div class="buttons-forgot"><label> Bạn đã có tài khoản? </label> <a href="/loginvuphone" class="link_access">đăng nhập ngay</a></div>
                             <input
                                 name="__RequestVerificationToken"
                                 type="hidden"
@@ -324,34 +321,25 @@
                     ></path>
                 </svg>
             </a>
-            <a class="items-chat-icon ic_mess" href="https://m.me/shopdunk.store" target="_blank"> <img src="/images/uploaded-source/icon/ic_messenger.png" width="28" height="28" /> </a>
+            <a class="items-chat-icon ic_mess" href="https://m.me/shopdunk.store" target="_blank"> <img src="/static/user/images/icons/ic_messenger.png" width="28" height="28" /> </a>
         </div>
     </section>
     <a id="backTop" class="btn btn-back-top bg-teal"></a>
     <div class="hidden-lg hidden-md bottom" style="display: none;">
         <ul>
-            <li>
-                <a href="/"> <img src="/images/uploaded-source/icon/IC_home.png" width="22" height="22" /> <span>Trang chủ</span> </a>
-            </li>
-            <li>
-                <a href="/flash-sale" id="procat"> <img src="/images/uploaded-source/icon/bottom-flash-sale.png" width="22" height="22" /> <span>Flash Sale</span> </a>
-            </li>
-            <li>
-                <a alt="Hệ thống cửa hàng" href="/find-store"> <img src="/images/uploaded-source/icon/Shop.png" width="22" height="22" /> <span>Cửa hàng</span> </a>
-            </li>
-            <li>
-                <a href="/tin-tuc"> <img style="height: 22px;" src="/images/uploaded-source/icon/News.png" width="22" height="22" /> <span>Tin tức</span> </a>
-            </li>
-            <li>
-                <a href="/care">
-                    <img style="height: 22px;" src="/images/uploaded-source/icon/fixed.png" width="22" height="22" />
-                    <span>
-                        Bảo hành<br />
-                        Apple
-                    </span>
-                </a>
-            </li>
-        </ul>
+            <li><a href="/"> <img src=/static/user/images/icons/IC_home.png width=22 height=22> <span>Trang
+               chủ</span> </a>
+            <li><a href=/flash-sale id=procat> <img src=/static/user/images/icons/bottom-flash-sale.png
+               width=22 height=22> <span>Flash Sale</span> </a>
+            <li><a alt="Hệ thống cửa hàng" href=/find-store> <img src=/static/user/images/icons/Shop.png
+               width=22 height=22> <span>Cửa hàng</span> </a>
+            <li><a href=/tin-tuc> <img style=height:22px src=/static/user/images/icons/News.png width=22
+               height=22> <span>Tin tức</span> </a>
+            <li><a href=/care> <img style=height:22px src=/static/user/images/icons/fixed.png width=22
+               height=22> <span>Bảo hành<br>Apple</span> </a>
+         </ul>
     </div>
 </div>
+
+
 {{ end }}

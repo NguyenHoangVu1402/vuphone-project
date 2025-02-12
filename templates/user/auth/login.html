@@ -4,8 +4,8 @@
         <div class="center-1">
             <div class="breadcrumb">
                 <ul>
-                    <li><a href="./">Trang chủ</a></li>
-                    <li><span>›</span> <a href="./login">Đăng nhập</a></li>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><span>›</span> <a href="/loginvuphone">Đăng nhập</a></li>
                 </ul>
             </div>
             <div class="page login-page">
@@ -35,18 +35,15 @@
                                     <div class="inputs reversed"><input type="checkbox" data-val="true"
                                             data-val-required="The Nhớ mật khẩu field is required." id="RememberMe"
                                             name="RememberMe" value="true"> <label for="RememberMe">Nhớ mật khẩu</label>
-                                        <span class="forgot-password"> <a href="/passwordrecovery">Quên mật khẩu?</a>
+                                        <span class="forgot-password"> <a href="/passwordrecoveryvuphone">Quên mật khẩu?</a>
                                         </span></div>
                                 </div>
                                 <div class="buttons"><button type="submit" class="button-1 login-button">Đăng
                                         nhập</button></div>
-                                <div class="buttons-forgot"><label> Bạn chưa có tài khoản? </label> <button
+                                <div class="buttons-forgot"><label> Bạn chưa có tài khoản? </label> <button 
                                         type="button" class="button-1 register-button"
-                                        onclick="">Tạo
-                                        tài khoản ngay</button></div><input name="__RequestVerificationToken"
-                                    type="hidden"
-                                    value="CfDJ8JJll3hmq2hFloL3XZ86Wkf2RuRdExhQ8iusqRZBjx197lIAccgwfLkiCVWjC1H68Y1G8-wdT6a9dke5AWLdKrY0-Vs82VPKjrCVuISkEswSVn57OOXxSL2dqci8gwXMJmewNWqaaCwwcKyMjPwmElk"><input
-                                    name="RememberMe" type="hidden" value="false">
+                                        onclick="window.location.href='/registervuphone'">Tạo
+                                        tài khoản ngay</button></div>
                             </form>
                         </div>
                     </div>
@@ -95,4 +92,6 @@
         </ul>
     </div>
 </div>
+
+
 {{ end }}

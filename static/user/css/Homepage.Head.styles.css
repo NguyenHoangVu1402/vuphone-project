@@ -33713,7 +33713,7 @@ div.heading_newletter {
     min-width: 196px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url('/images/uploaded-source/icon/arrow-down.png');
+    background-image: url('/static/user/images/icons/arrow-down.png');
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 90%;
@@ -33978,7 +33978,7 @@ span.forgot-password {
     text-transform: capitalize;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url('/images/uploaded-source/icon/arrow-down.png');
+    background-image: url('/static/user/images/icons/arrow-down.png');
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 84%;
@@ -35841,7 +35841,7 @@ a.btn_buttom.thucu::before {
     min-width: 196px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 90%;
@@ -36361,7 +36361,7 @@ select.storelocation-ddl {
     border-radius: 8px;
     margin-top: 12px;
     min-height: 38px;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 11px;
     background-repeat: no-repeat;
     background-position-x: 91%;
@@ -36708,7 +36708,7 @@ button.ic_lg_show-news:before {
 .html-address-edit-page .inputs select {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 95%;
@@ -36923,7 +36923,7 @@ div#checkout-payment-load {
 .html-product-details-page select {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 97%;
@@ -40110,7 +40110,7 @@ button.btn.btn-referral {
     right: 8px;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 90%;
@@ -51603,7 +51603,7 @@ label+* {
 .customer-info-page .inputs select {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 90%;
@@ -52287,7 +52287,7 @@ html .all_popup-workshop .btn-primary {
 .workshop-page-detail select {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 96%;

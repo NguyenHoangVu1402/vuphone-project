@@ -21883,7 +21883,7 @@ input#termsofservice {
             min-width: 196px;
             -webkit-appearance: none;
             -moz-appearance: none;
-            background-image: url('/images/uploaded-source/icon/arrow-down.png');
+            background-image: url('/static/user/images/icons/arrow-down.png');
             background-size: 12px;
             background-repeat: no-repeat;
             background-position-x: 90%;
@@ -22145,7 +22145,7 @@ input#termsofservice {
         text-transform: capitalize;
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url('/images/uploaded-source/icon/arrow-down.png');
+        background-image: url('/static/user/images/icons/arrow-down.png');
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 84%;
@@ -23985,7 +23985,7 @@ button.button-1.password-recovery-button {
         min-width: 196px;
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 90%;
@@ -24505,7 +24505,7 @@ button.button-1.password-recovery-button {
         border-radius: 8px;
         margin-top: 12px;
         min-height: 38px;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 11px;
         background-repeat: no-repeat;
         background-position-x: 91%;
@@ -24844,7 +24844,7 @@ button.button-1.password-recovery-button {
     .html-address-edit-page .inputs select {
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 95%;
@@ -25051,7 +25051,7 @@ button.button-1.password-recovery-button {
     .html-shopping-cart-page select, .html-product-details-page select {
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 97%;
@@ -28233,7 +28233,7 @@ button.button-1.password-recovery-button {
         right: 8px;
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 90%;
@@ -40283,7 +40283,7 @@ label, label + * {
 .customer-info-page .inputs select {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 90%;
@@ -40946,7 +40946,7 @@ html .all_popup-workshop .btn-primary {
 .workshop-page-detail select {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 96%;

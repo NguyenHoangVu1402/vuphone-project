@@ -10,4 +10,7 @@ func LoginRoutes(r *gin.Engine) {
 	r.GET("/loginvuphone", func(c *gin.Context) {
 		utils.RenderTemplateAuth(c, "login", "Login VuPhone")
 	})
+	r.GET("/registervuphone", func(c *gin.Context) {
+		utils.RenderTemplateAuth(c, "register", "Register VuPhone")
+	})
 } 

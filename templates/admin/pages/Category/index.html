@@ -9,12 +9,15 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item d-flex align-items-center">
                 <a class="text-muted text-decoration-none d-flex" href="./">
-                  <iconify-icon icon="solar:home-2-line-duotone" class="fs-6"></iconify-icon>
+                  <iconify-icon
+                    icon="solar:home-2-line-duotone"
+                    class="fs-6"></iconify-icon>
                 </a>
               </li>
               <li class="breadcrumb-item">
                 <a href="/admin/categories/create">
-                  <span class="badge fw-medium fs-2 bg-primary-subtle text-primary">
+                  <span
+                    class="badge fw-medium fs-2 bg-primary-subtle text-primary">
                     Create Category
                   </span>
                 </a>
@@ -33,13 +36,22 @@
           <a href="/admin/categories/create" class="btn btn-primary">
             <i class="ti ti-plus fs-4"></i>&nbsp; Add Category
           </a>
-          <div class="position-relative" style="flex-grow: 1; max-width: 300px;">
-            <input type="text" class="form-control" placeholder="Search categories..." id="categorySearch">
-            <ul class="list-group position-absolute w-100 shadow mt-1 rounded" id="searchResults" style="display: none; z-index: 1000;"></ul>
+          <div class="position-relative" style="flex-grow: 1; max-width: 300px">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search categories..."
+              id="searchInput" />
+            <ul
+              class="list-group position-absolute w-100 shadow mt-1 rounded"
+              id="searchResults"
+              style="display: none; z-index: 1000"></ul>
           </div>
         </div>
         <div class="table-responsive">
-          <table id="t_add_row" class="table table-striped w-100 table-bordered display text-nowrap">
+          <table
+            id="t_add_row"
+            class="table table-striped w-100 table-bordered display text-nowrap">
             <thead>
               <tr>
                 <th>ID</th>
@@ -49,11 +61,13 @@
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="categories-table-body"></tbody>
+            <tbody id="categories-table-body" class="categoryTableBody"></tbody>
           </table>
 
           <div id="pagination">
-            <button id="prevPage" class="btn btn-secondary" disabled>Previous</button>
+            <button id="prevPage" class="btn btn-secondary" disabled>
+              Previous
+            </button>
             <span id="pageNumber">1</span>
             <button id="nextPage" class="btn btn-secondary">Next</button>
           </div>
@@ -63,29 +77,64 @@
   </div>
 </div>
 
-<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="editCategoryModal"
+  tabindex="-1"
+  aria-labelledby="editCategoryModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editCategoryModalLabel">Chỉnh Sửa Danh Mục</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="editCategoryModalLabel">
+          Chỉnh Sửa Danh Mục
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="editCategoryForm">
-          <input type="hidden" id="editCategoryId" name="id">
+          <input type="hidden" id="editCategoryId" name="id" />
           <div class="mb-3">
-            <label for="editCategoryName" class="form-label">Tên danh mục</label>
-            <input type="text" class="form-control" id="editCategoryName" name="name" required>
+            <label for="editCategoryName" class="form-label"
+              >Tên danh mục</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="editCategoryName"
+              name="name"
+              required />
           </div>
           <div class="mb-3">
-            <label for="editCategorySlug" class="form-label">Slug danh mục</label>
-            <input type="text" style="pointer-events: none; background-color: #e9ecef; cursor: not-allowed;" class="form-control" id="editCategorySlug" name="slug" readonly>
+            <label for="editCategorySlug" class="form-label"
+              >Slug danh mục</label
+            >
+            <input
+              type="text"
+              style="
+                pointer-events: none;
+                background-color: #e9ecef;
+                cursor: not-allowed;
+              "
+              class="form-control"
+              id="editCategorySlug"
+              name="slug"
+              readonly />
           </div>
           <div class="mb-3">
-            <label for="editCategoryParent" class="form-label">Danh mục cha</label>
+            <label for="editCategoryParent" class="form-label"
+              >Danh mục cha</label
+            >
             <div id="parentCategoryContainer">
               <span id="parentCategoryText" class="form-control"></span>
-              <select class="form-select d-none" id="editCategoryParent" name="parent_id"></select>
+              <select
+                class="form-select d-none"
+                id="editCategoryParent"
+                name="parent_id"></select>
             </div>
           </div>
           <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
@@ -96,22 +145,25 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  let currentPage = 1;
-  const limit = 5;
-  let allCategories = [];
+  document.addEventListener("DOMContentLoaded", function () {
+    let currentPage = 1;
+    const limit = 5;
+    let allCategories = [];
 
-  function fetchCategories(page = 1) {
-    fetch(`/admin/categories/indexCategory?page=${page}&limit=${limit}`)
-      .then(response => response.json())
-      .then(data => {
-        allCategories = data.categories;
-        const tableBody = document.getElementById("categories-table-body");
-        tableBody.innerHTML = "";
+    function fetchCategories(page = 1) {
+      fetch(`/admin/categories/indexCategory?page=${page}&limit=${limit}`)
+        .then((response) => response.json())
+        .then((data) => {
+          allCategories = data.categories;
+          const tableBody = document.getElementById("categories-table-body");
+          tableBody.innerHTML = "";
 
-        data.categories.forEach(category => {
-          let parentName = category.parent_id ? data.categories.find(cat => cat.id === category.parent_id)?.name || "Không có" : "Không có";
-          const row = `
+          data.categories.forEach((category) => {
+            let parentName = category.parent_id
+              ? data.categories.find((cat) => cat.id === category.parent_id)
+                  ?.name || "Không có"
+              : "Không có";
+            const row = `
             <tr>
               <td>${category.id}</td>
               <td>${category.name}</td>
@@ -122,36 +174,45 @@ document.addEventListener("DOMContentLoaded", function () {
                 <button class="btn btn-danger" onclick="deleteCategory(${category.id})">Delete</button>
               </td>
             </tr>`;
-          tableBody.insertAdjacentHTML("beforeend", row);
-        });
-      })
-      .catch(error => console.error("Lỗi khi tải danh mục:", error));
-  }
+            tableBody.insertAdjacentHTML("beforeend", row);
+          });
+        })
+        .catch((error) => console.error("Lỗi khi tải danh mục:", error));
+    }
 
-  window.editCategory = function (id, name, slug, parentId) {
-    document.getElementById("editCategoryId").value = id;
-    document.getElementById("editCategoryName").value = name;
-    document.getElementById("editCategorySlug").value = slug;
+    window.editCategory = function (id, name, slug, parentId) {
+      document.getElementById("editCategoryId").value = id;
+      document.getElementById("editCategoryName").value = name;
+      document.getElementById("editCategorySlug").value = slug;
 
-    const parentText = document.getElementById("parentCategoryText");
-    const parentSelect = document.getElementById("editCategoryParent");
-    parentText.textContent = allCategories.find(cat => cat.id === parentId)?.name || "Không có";
-    parentSelect.innerHTML = '<option value="">----------------Chọn Danh Mục Cha---------------</option>' +
-    allCategories.map(cat => `<option value="${cat.id}" ${cat.id === parentId ? 'selected' : ''}>${cat.name}</option>`).join('');
-    
-    parentText.classList.remove("d-none");
-    parentSelect.classList.add("d-none");
-    
-    parentText.addEventListener("click", function () {
-      parentText.classList.add("d-none");
-      parentSelect.classList.remove("d-none");
-    });
+      const parentText = document.getElementById("parentCategoryText");
+      const parentSelect = document.getElementById("editCategoryParent");
+      parentText.textContent =
+        allCategories.find((cat) => cat.id === parentId)?.name || "Không có";
+      parentSelect.innerHTML =
+        '<option value="">----------------Chọn Danh Mục Cha---------------</option>' +
+        allCategories
+          .map(
+            (cat) =>
+              `<option value="${cat.id}" ${
+                cat.id === parentId ? "selected" : ""
+              }>${cat.name}</option>`
+          )
+          .join("");
 
-    new bootstrap.Modal(document.getElementById("editCategoryModal")).show();
-  };
+      parentText.classList.remove("d-none");
+      parentSelect.classList.add("d-none");
 
-  fetchCategories(currentPage);
-});
+      parentText.addEventListener("click", function () {
+        parentText.classList.add("d-none");
+        parentSelect.classList.remove("d-none");
+      });
+
+      new bootstrap.Modal(document.getElementById("editCategoryModal")).show();
+    };
+
+    fetchCategories(currentPage);
+  });
 </script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -161,8 +222,10 @@ document.addEventListener("DOMContentLoaded", function () {
     nameInput.addEventListener("input", function () {
       let slug = nameInput.value
         .toLowerCase() // Chuyển thành chữ thường
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Xóa dấu tiếng Việt
-        .replace(/đ/g, "d").replace(/Đ/g, "D") // Chuyển đ -> d
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Xóa dấu tiếng Việt
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D") // Chuyển đ -> d
         .replace(/\s+/g, "-") // Thay khoảng trắng bằng dấu '-'
         .replace(/[^a-z0-9-]/g, "") // Xóa ký tự đặc biệt
         .replace(/-+/g, "-") // Xóa dấu '-' dư thừa
@@ -173,116 +236,188 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 </script>
 <script>
-  document.getElementById("editCategoryForm").addEventListener("submit", async function(event) {
+  document
+    .getElementById("editCategoryForm")
+    .addEventListener("submit", async function (event) {
       event.preventDefault(); // Ngăn chặn reload trang
-  
+
       const categoryId = document.getElementById("editCategoryId").value;
       const name = document.getElementById("editCategoryName").value;
       const slug = document.getElementById("editCategorySlug").value;
-      const parentId = document.getElementById("editCategoryParent").value || null;
-  
+      const parentId =
+        document.getElementById("editCategoryParent").value || null;
+
       if (!categoryId) {
-          Swal.fire({
-              icon: "error",
-              title: "Lỗi!",
-              text: "Không tìm thấy ID danh mục!"
-          });
-          return;
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi!",
+          text: "Không tìm thấy ID danh mục!",
+        });
+        return;
       }
-  
+
       try {
-          const response = await fetch(`/admin/categories/updateCategory/${categoryId}`, {
-              method: "PUT",
-              headers: {
-                  "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                  id: Number(categoryId),
-                  name: name,
-                  slug: slug,
-                  parent_id: parentId ? Number(parentId) : null
-              })
+        const response = await fetch(
+          `/admin/categories/updateCategory/${categoryId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: Number(categoryId),
+              name: name,
+              slug: slug,
+              parent_id: parentId ? Number(parentId) : null,
+            }),
+          }
+        );
+
+        const result = await response.json();
+
+        if (response.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "Thành công!",
+            text: result.message,
+            timer: 2000,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+          }).then(() => {
+            location.reload(); // Reload sau khi thông báo
           });
-  
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Lỗi!",
+            text: result.message,
+          });
+        }
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi!",
+          text: "Có lỗi xảy ra, vui lòng thử lại sau.",
+        });
+      }
+    });
+</script>
+<script>
+  async function deleteCategory(categoryId) {
+    Swal.fire({
+      title: "Bạn có chắc chắn?",
+      text: "Hành động này sẽ xóa danh mục vĩnh viễn!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Xóa ngay!",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(
+            `/admin/categories/deleteCategory/${categoryId}`,
+            {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+
           const result = await response.json();
-  
+
           if (response.ok) {
-              Swal.fire({
-                  icon: "success",
-                  title: "Thành công!",
-                  text: result.message,
-                  timer: 2000,
+            Swal.fire({
+              icon: "success",
+              title: "Thành công!",
+              text: result.message,
+              timer: 2000,
               showConfirmButton: false,
               allowOutsideClick: false,
-              }).then(() => {
-                  location.reload(); // Reload sau khi thông báo
-              });
+            }).then(() => {
+              location.reload(); // Reload lại danh sách
+            });
           } else {
-              Swal.fire({
-                  icon: "error",
-                  title: "Lỗi!",
-                  text: result.message
-              });
-          }
-      } catch (error) {
-          console.error("Lỗi khi gửi yêu cầu:", error);
-          Swal.fire({
+            Swal.fire({
               icon: "error",
               title: "Lỗi!",
-              text: "Có lỗi xảy ra, vui lòng thử lại sau."
+              text: result.message,
+            });
+          }
+        } catch (error) {
+          console.error("Lỗi khi gửi yêu cầu:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Lỗi!",
+            text: "Có lỗi xảy ra, vui lòng thử lại sau.",
           });
+        }
       }
-  });
-  </script>
-  <script>
-    async function deleteCategory(categoryId) {
-        Swal.fire({
-            title: "Bạn có chắc chắn?",
-            text: "Hành động này sẽ xóa danh mục vĩnh viễn!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Xóa ngay!",
-            cancelButtonText: "Hủy"
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const response = await fetch(`/admin/categories/deleteCategory/${categoryId}`, {
-                        method: "DELETE",
-                        headers: { "Content-Type": "application/json" }
-                    });
-    
-                    const result = await response.json();
-    
-                    if (response.ok) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Thành công!",
-                            text: result.message,
-                            timer: 2000,
-                            showConfirmButton: false,
-                            allowOutsideClick: false,
-                        }).then(() => {
-                            location.reload(); // Reload lại danh sách
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Lỗi!",
-                            text: result.message
-                        });
-                    }
-                } catch (error) {
-                    console.error("Lỗi khi gửi yêu cầu:", error);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Lỗi!",
-                        text: "Có lỗi xảy ra, vui lòng thử lại sau."
-                    });
-                }
-            }
-        });
+    });
+  }
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const categoryTableBodyCollection = document.getElementsByClassName("categoryTableBody");
+
+    if (categoryTableBodyCollection.length === 0) {
+        console.error("Lỗi: Không tìm thấy phần tử có class 'categoryTableBody'");
+        return;
     }
-    </script>
+
+    const categoryTableBody = categoryTableBodyCollection[0];
+
+    let timeout = null;
+
+    async function fetchCategories(query = "") {
+        try {
+            const response = await fetch(`/admin/categories/searchCategory?q=${query}`);
+            const data = await response.json();
+
+            if (!data || !Array.isArray(data.categories)) {
+                console.error("Lỗi: Dữ liệu trả về không hợp lệ", data);
+                categoryTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Lỗi dữ liệu từ server</td></tr>`;
+                return;
+            }
+
+            categoryTableBody.innerHTML = "";
+
+            if (data.categories.length > 0) {
+                data.categories.forEach((category) => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${category.id}</td>
+                        <td>${category.name}</td>
+                        <td>${category.slug}</td>
+                        <td>${category.parent_id ? data.categories.find(cat => cat.id === category.parent_id)?.name || "Không có" : "Không có"}</td>
+                        <td>
+                            <button class="btn btn-warning" onclick="editCategory(${category.id}, '${category.name}', '${category.slug}', ${category.parent_id})">Edit</button>
+                            <button class="btn btn-danger" onclick="deleteCategory(${category.id})">Delete</button>
+                        </td>
+                    `;
+                    categoryTableBody.appendChild(row);
+                });
+            } else {
+                categoryTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Không tìm thấy danh mục</td></tr>`;
+            }
+        } catch (error) {
+            console.error("Lỗi tìm kiếm:", error);
+            categoryTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Lỗi kết nối đến server</td></tr>`;
+        }
+    }
+
+    searchInput.addEventListener("input", function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const query = searchInput.value.trim();
+            fetchCategories(query);
+        }, 300);
+    });
+
+    fetchCategories();
+});
+
+</script>
 {{ end }}

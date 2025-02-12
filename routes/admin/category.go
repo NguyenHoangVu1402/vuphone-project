@@ -22,5 +22,6 @@ func CategoryRoutes(r *gin.Engine) {
 		categoryGroup.GET("/indexCategory", api.GetAllCategories)
 		categoryGroup.PUT("/updateCategory/:id", api.UpdateCategory)
 		categoryGroup.DELETE("/deleteCategory/:id", api.DeleteCategory)
+		categoryGroup.GET("/searchCategory", api.SearchCategories)
 	}
 }

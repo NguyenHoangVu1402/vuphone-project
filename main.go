@@ -31,6 +31,9 @@ func main() {
 	/* Auth */
 	auth.LoginRoutes(r)
 
+	//Pusher
+	r.GET("/send", config.SendEvent)
+	
 	// Run the server
 	err := r.Run(":8080")
 	if err != nil {

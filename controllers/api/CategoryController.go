@@ -175,3 +175,28 @@ func DeleteCategory(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Xóa danh mục thành công!"})
 }
+
+func SearchCategories(c *gin.Context) {
+	// Lấy từ khóa tìm kiếm từ query
+	keyword := c.Query("q")
+
+	var categories []models.Category
+
+	if keyword == "" {
+		// Nếu không có `q`, trả về toàn bộ danh mục
+		if err := config.DB.Limit(10).Find(&categories).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Lỗi khi lấy danh mục"})
+			return
+		}
+	} else {
+		// Nếu có từ khóa tìm kiếm, thực hiện truy vấn LIKE
+		searchTerm := "%" + keyword + "%"
+		if err := config.DB.Where("name LIKE ? OR slug LIKE ?", searchTerm, searchTerm).Limit(10).Find(&categories).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Lỗi khi tìm kiếm danh mục"})
+			return
+		}
+	}
+
+	// Trả về danh sách danh mục
+	c.JSON(http.StatusOK, gin.H{"categories": categories})
+}

@@ -23,7 +23,7 @@ func RenderTemplateAuth(c *gin.Context, tmpl string, title string) {
 	data := map[string]string{
 		"Title": title,
 	}
-	err = templates.ExecuteTemplate(c.Writer, "index.html", data)
+	err = templates.ExecuteTemplate(c.Writer, "auth.html", data)
 	if err != nil {
 		log.Println("Lỗi thực thi template:", err)
 		c.String(http.StatusInternalServerError, "Lỗi server")

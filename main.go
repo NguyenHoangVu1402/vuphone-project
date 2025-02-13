@@ -19,7 +19,10 @@ func main() {
 	config.ConnectDB()
 
 	// Migrate the schema
-	models.MigrateDB(config.DB)
+	// Chạy migration
+	if err := models.MigrateDB(config.DB); err != nil {
+		log.Fatal(err)
+	}
 
 	// Routes
 	/* User */
@@ -27,6 +30,7 @@ func main() {
 	/* Admin */
 	admin.DashboardRoutes(r)
 	admin.CategoryRoutes(r)
+	admin.RoleRoutes(r)
 
 	/* Auth */
 	auth.LoginRoutes(r)

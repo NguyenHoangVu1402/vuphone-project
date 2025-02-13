@@ -8,6 +8,7 @@ import (
 	"vuphone-project/models"
 	"strconv"
 	"github.com/gin-gonic/gin"
+	"github.com/gofrs/uuid"
 )
 
 // Hàm tạo danh mục
@@ -15,7 +16,7 @@ func CreateCategories(c *gin.Context) {
 	var input struct {
 		Name     string `json:"name" binding:"required"`
 		Slug     string `json:"slug" binding:"required"`
-		ParentID string `json:"parent_id"` // Nhận `parent_id` dưới dạng string
+		ParentID string `json:"parent_id"` // Nhận ParentID dưới dạng string
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -23,19 +24,26 @@ func CreateCategories(c *gin.Context) {
 		return
 	}
 
-	// Chuyển đổi ParentID từ string sang uint
-	var parentID *uint
+	// Chuyển đổi ParentID từ string sang UUID
+	var parentID *uuid.UUID
 	if input.ParentID != "" {
-		id, err := strconv.ParseUint(input.ParentID, 10, 32)
+		parsedUUID, err := uuid.FromString(input.ParentID)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"message": "parent_id phải là số nguyên"})
+			c.JSON(http.StatusBadRequest, gin.H{"message": "parent_id phải là UUID hợp lệ"})
 			return
 		}
-		uintID := uint(id)
-		parentID = &uintID
+		parentID = &parsedUUID
+	}
+
+	// Tạo UUID mới cho Category
+	newID, err := uuid.NewV4()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Lỗi khi tạo UUID"})
+		return
 	}
 
 	category := models.Category{
+		ID:       newID,
 		Name:     input.Name,
 		Slug:     input.Slug,
 		ParentID: parentID,
@@ -46,18 +54,18 @@ func CreateCategories(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Tạo danh mục thành công!"})
+	c.JSON(http.StatusOK, gin.H{"message": "Tạo danh mục thành công!", "data": category})
 }
 
 // Định dạng danh mục theo cây cha-con
-func formatCategories(categories []models.Category, parentID *uint, level int) []map[string]interface{} {
+func formatCategories(categories []models.Category, parentID *uuid.UUID, level int) []map[string]interface{} {
 	var formatted []map[string]interface{}
 
 	for _, cat := range categories {
 		if (cat.ParentID == nil && parentID == nil) || (cat.ParentID != nil && parentID != nil && *cat.ParentID == *parentID) {
 			formatted = append(formatted, map[string]interface{}{
-				"id":   cat.ID,
-				"name": strings.Repeat("-", level*2) + " " + cat.Name, // Thêm dấu gạch thể hiện cấp bậc
+				"id":   cat.ID.String(), // Chuyển UUID thành string
+				"name": strings.Repeat("-", level*2) + " " + cat.Name, // Hiển thị cấp bậc bằng dấu "-"
 				"slug": cat.Slug,
 			})
 			// Đệ quy lấy danh mục con
@@ -117,31 +125,56 @@ func GetAllCategories(c *gin.Context) {
 }
 
 func UpdateCategory(c *gin.Context) {
-	var updatedCategory models.Category
-
-	if err := c.ShouldBindJSON(&updatedCategory); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Dữ liệu không hợp lệ", "error": err.Error()})
+	// Lấy ID từ URL thay vì JSON
+	id := c.Param("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Thiếu ID trong URL"})
 		return
 	}
 
-	// Kiểm tra xem ID có hợp lệ không
-	if updatedCategory.ID == 0 {
+	// Chuyển đổi ID từ string sang uuid.UUID
+	categoryID, err := uuid.FromString(id)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "ID danh mục không hợp lệ"})
 		return
 	}
 
-	// Tìm danh mục cần cập nhật
+	// Định nghĩa struct đầu vào (không cần ID)
+	var input struct {
+		Name     string  `json:"name" binding:"required"`
+		Slug     string  `json:"slug" binding:"required"`
+		ParentID *string `json:"parent_id"`
+	}
+
+	// Kiểm tra dữ liệu đầu vào
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Dữ liệu không hợp lệ", "error": err.Error()})
+		return
+	}
+
+	// Chuyển đổi ParentID nếu có
+	var parentID *uuid.UUID
+	if input.ParentID != nil {
+		parsedParentID, err := uuid.FromString(*input.ParentID)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "parent_id không hợp lệ"})
+			return
+		}
+		parentID = &parsedParentID
+	}
+
+	// Tìm danh mục
 	var category models.Category
-	if err := config.DB.First(&category, updatedCategory.ID).Error; err != nil {
+	if err := config.DB.First(&category, "id = ?", categoryID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Danh mục không tồn tại"})
 		return
 	}
 
-	// Chỉ cập nhật các trường name, slug, parent_id (không cập nhật ID)
+	// Cập nhật dữ liệu
 	if err := config.DB.Model(&category).Updates(map[string]interface{}{
-		"name":      updatedCategory.Name,
-		"slug":      updatedCategory.Slug,
-		"parent_id": updatedCategory.ParentID,
+		"name":      input.Name,
+		"slug":      input.Slug,
+		"parent_id": parentID,
 	}).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Lỗi khi cập nhật danh mục"})
 		return
@@ -150,24 +183,31 @@ func UpdateCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Cập nhật danh mục thành công!"})
 }
 
+
 // Xóa danh mục
 func DeleteCategory(c *gin.Context) {
-	// Lấy ID từ URL param
-	idParam := c.Param("id")
-	categoryID, err := strconv.Atoi(idParam)
+	// Lấy ID từ URL
+	id := c.Param("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Thiếu ID trong URL"})
+		return
+	}
+
+	// Chuyển ID từ string sang UUID
+	categoryID, err := uuid.FromString(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "ID danh mục không hợp lệ"})
 		return
 	}
 
-	// Tìm danh mục cần xóa
+	// Tìm danh mục
 	var category models.Category
-	if err := config.DB.First(&category, categoryID).Error; err != nil {
+	if err := config.DB.First(&category, "id = ?", categoryID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Danh mục không tồn tại"})
 		return
 	}
 
-	// Xóa danh mục (nếu dùng soft delete, thay `.Delete()` bằng `.Unscoped().Delete()`)
+	// Xóa danh mục (có thể dùng soft delete)
 	if err := config.DB.Delete(&category).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Lỗi khi xóa danh mục"})
 		return
@@ -175,6 +215,7 @@ func DeleteCategory(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Xóa danh mục thành công!"})
 }
+
 
 func SearchCategories(c *gin.Context) {
 	// Lấy từ khóa tìm kiếm từ query

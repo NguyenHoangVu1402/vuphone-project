@@ -4,7 +4,7 @@
     <div class="row align-items-center">
       <div class="col-12">
         <div class="d-sm-flex align-items-center justify-space-between">
-          <h4 class="mb-4 mb-sm-0 card-title">Danh Mục API</h4>
+          <h4 class="mb-4 mb-sm-0 card-title">Role API</h4>
           <nav aria-label="breadcrumb" class="ms-auto">
             <ol class="breadcrumb">
               <li class="breadcrumb-item d-flex align-items-center">
@@ -15,10 +15,10 @@
                 </a>
               </li>
               <li class="breadcrumb-item">
-                <a href="/admin/categories/create">
+                <a href="/admin/roles/create">
                   <span
                     class="badge fw-medium fs-2 bg-primary-subtle text-primary">
-                    Create Category
+                    Create Roles
                   </span>
                 </a>
               </li>
@@ -33,14 +33,14 @@
     <div class="card">
       <div class="card-body">
         <div class="d-flex align-items-center gap-2 mb-3">
-          <a href="/admin/categories/create" class="btn btn-primary">
-            <i class="ti ti-plus fs-4"></i>&nbsp; Add Category
+          <a href="/admin/roles/create" class="btn btn-primary">
+            <i class="ti ti-plus fs-4"></i>&nbsp; Add Roles
           </a>
           <div class="position-relative" style="flex-grow: 1; max-width: 300px">
             <input
               type="text"
               class="form-control"
-              placeholder="Search categories..."
+              placeholder="Search roles..."
               id="searchInput" />
             <ul
               class="list-group position-absolute w-100 shadow mt-1 rounded"
@@ -57,11 +57,10 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Slug</th>
-                <th>Parent</th>
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="categories-table-body" class="categoryTableBody"></tbody>
+            <tbody id="roles-table-body" class="roleTableBody"></tbody>
           </table>
 
           <div id="pagination">
@@ -79,14 +78,14 @@
 
 <div
   class="modal fade"
-  id="editCategoryModal"
+  id="editRoleModal"
   tabindex="-1"
-  aria-labelledby="editCategoryModalLabel"
+  aria-labelledby="editRoleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editCategoryModalLabel">
+        <h5 class="modal-title" id="editRoleModalLabel">
           Chỉnh Sửa Danh Mục
         </h5>
         <button
@@ -96,21 +95,21 @@
           aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="editCategoryForm">
-          <input type="hidden" id="editCategoryId" name="id" />
+        <form id="editRoleForm">
+          <input type="hidden" id="editRoleId" name="id" />
           <div class="mb-3">
-            <label for="editCategoryName" class="form-label"
+            <label for="editRoleName" class="form-label"
               >Tên danh mục</label
             >
             <input
               type="text"
               class="form-control"
-              id="editCategoryName"
+              id="editRoleName"
               name="name"
               required />
           </div>
           <div class="mb-3">
-            <label for="editCategorySlug" class="form-label"
+            <label for="editRoleSlug" class="form-label"
               >Slug danh mục</label
             >
             <input
@@ -121,21 +120,9 @@
                 cursor: not-allowed;
               "
               class="form-control"
-              id="editCategorySlug"
+              id="editRoleSlug"
               name="slug"
               readonly />
-          </div>
-          <div class="mb-3">
-            <label for="editCategoryParent" class="form-label"
-              >Danh mục cha</label
-            >
-            <div id="parentCategoryContainer">
-              <span id="parentCategoryText" class="form-control"></span>
-              <select
-                class="form-select d-none"
-                id="editCategoryParent"
-                name="parent_id"></select>
-            </div>
           </div>
           <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
         </form>
@@ -148,70 +135,41 @@
   document.addEventListener("DOMContentLoaded", function () {
     let currentPage = 1;
     const limit = 5;
-    let allCategories = [];
+    let allRoles = [];
 
-    function fetchCategories(page = 1) {
-      fetch(`/admin/categories/indexCategory?page=${page}&limit=${limit}`)
+    function fetchRoles(page = 1) {
+      fetch(`/admin/roles/indexRole?page=${page}&limit=${limit}`)
         .then((response) => response.json())
         .then((data) => {
-          allCategories = data.categories;
-          const tableBody = document.getElementById("categories-table-body");
+          allRoles = data.roles;
+          const tableBody = document.getElementById("roles-table-body");
           tableBody.innerHTML = "";
 
-          data.categories.forEach((category) => {
-            let parentName = category.parent_id
-              ? data.categories.find((cat) => cat.id === category.parent_id)
-                  ?.name || "Không có"
-              : "Không có";
+          data.roles.forEach((role) => {
             const row = `
             <tr>
-              <td>${category.id}</td>
-              <td>${category.name}</td>
-              <td>${category.slug}</td>
-              <td>${parentName}</td>
+              <td>${role.id}</td>
+              <td>${role.name}</td>
+              <td>${role.slug}</td>
               <td>
-                  <button class="btn btn-warning" onclick="editCategory('${category.id}', '${category.name}', '${category.slug}', '${category.parent_id}')">Edit</button>
-                  <button class="btn btn-danger" onclick="deleteCategory('${category.id}')">Delete</button>
+                  <button class="btn btn-warning" onclick="editRole('${role.id}', '${role.name}', '${role.slug}')">Edit</button>
+                  <button class="btn btn-danger" onclick="deleteRole('${role.id}')">Delete</button>
               </td>
             </tr>`;
             tableBody.insertAdjacentHTML("beforeend", row);
           });
         })
-        .catch((error) => console.error("Lỗi khi tải danh mục:", error));
+        .catch((error) => console.error("Lỗi khi tải role:", error));
     }
 
-    window.editCategory = function (id, name, slug, parentId) {
-      document.getElementById("editCategoryId").value = id;
-      document.getElementById("editCategoryName").value = name;
-      document.getElementById("editCategorySlug").value = slug;
-
-      const parentText = document.getElementById("parentCategoryText");
-      const parentSelect = document.getElementById("editCategoryParent");
-      parentText.textContent =
-        allCategories.find((cat) => cat.id === parentId)?.name || "Không có";
-      parentSelect.innerHTML =
-        '<option value="">----------------Chọn Danh Mục Cha---------------</option>' +
-        allCategories
-          .map(
-            (cat) =>
-              `<option value="${cat.id}" ${
-                cat.id === parentId ? "selected" : ""
-              }>${cat.name}</option>`
-          )
-          .join("");
-
-      parentText.classList.remove("d-none");
-      parentSelect.classList.add("d-none");
-
-      parentText.addEventListener("click", function () {
-        parentText.classList.add("d-none");
-        parentSelect.classList.remove("d-none");
-      });
-
-      new bootstrap.Modal(document.getElementById("editCategoryModal")).show();
+    window.editRole = function (id, name, slug) {
+      document.getElementById("editRoleId").value = id;
+      document.getElementById("editRoleName").value = name;
+      document.getElementById("editRoleSlug").value = slug;
+      new bootstrap.Modal(document.getElementById("editRoleModal")).show();
     };
 
-    fetchCategories(currentPage);
+    fetchRoles(currentPage);
   });
 </script>
 <script>
@@ -237,36 +195,33 @@
 </script>
 <script>
   document
-    .getElementById("editCategoryForm")
+    .getElementById("editRoleForm")
     .addEventListener("submit", async function (event) {
       event.preventDefault(); // Ngăn chặn reload trang
 
-      const categoryId = document.getElementById("editCategoryId").value;
-      const name = document.getElementById("editCategoryName").value;
-      const slug = document.getElementById("editCategorySlug").value;
-      const parentId =
-        document.getElementById("editCategoryParent").value || null;
+      const roleId = document.getElementById("editRoleId").value;
+      const name = document.getElementById("editRoleName").value;
+      const slug = document.getElementById("editRoleSlug").value;
 
-      if (!categoryId) {
+      if (!roleId) {
         Swal.fire({
           icon: "error",
           title: "Lỗi!",
-          text: "Không tìm thấy ID danh mục!",
+          text: "Không tìm thấy ID role!",
         });
         return;
       }
 
       try {
         const response = await fetch(
-          `/admin/categories/updateCategory/${categoryId}`,
+          `/admin/roles/updateRole/${roleId}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              id: categoryId, // Giữ nguyên là string
+              id: roleId, // Giữ nguyên là string
               name: name,
               slug: slug,
-              parent_id: parentId ? parentId : null, // Giữ nguyên string hoặc null
             }),
           }
         );
@@ -302,7 +257,7 @@
     });
 </script>
 <script>
-  async function deleteCategory(categoryId) {
+  async function deleteRole(roleId) {
   Swal.fire({
     title: "Bạn có chắc chắn?",
     text: "Hành động này sẽ xóa danh mục vĩnh viễn!",
@@ -316,7 +271,7 @@
     if (result.isConfirmed) {
       try {
         const response = await fetch(
-          `/admin/categories/deleteCategory/${categoryId}`, // UUID giữ nguyên
+          `/admin/roles/deleteRole/${roleId}`, // UUID giữ nguyên
           {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -359,62 +314,54 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("searchInput");
-    const categoryTableBodyCollection =
-      document.getElementsByClassName("categoryTableBody");
+    const roleTableBodyCollection =
+      document.getElementsByClassName("roleTableBody");
 
-    if (categoryTableBodyCollection.length === 0) {
-      console.error("Lỗi: Không tìm thấy phần tử có class 'categoryTableBody'");
+    if (roleTableBodyCollection.length === 0) {
+      console.error("Lỗi: Không tìm thấy phần tử có class 'roleTableBody'");
       return;
     }
 
-    const categoryTableBody = categoryTableBodyCollection[0];
+    const roleTableBody = roleTableBodyCollection[0];
 
     let timeout = null;
 
-    async function fetchCategories(query = "") {
+    async function fetchRoles(query = "") {
       try {
         const response = await fetch(
-          `/admin/categories/searchCategory?q=${query}`
+          `/admin/roles/searchRole?q=${query}`
         );
         const data = await response.json();
 
-        if (!data || !Array.isArray(data.categories)) {
+        if (!data || !Array.isArray(data.role)) {
           console.error("Lỗi: Dữ liệu trả về không hợp lệ", data);
-          categoryTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Lỗi dữ liệu từ server</td></tr>`;
+          roleTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Lỗi dữ liệu từ server</td></tr>`;
           return;
         }
 
-        categoryTableBody.innerHTML = "";
+        roleTableBody.innerHTML = "";
 
-        if (data.categories.length > 0) {
-          data.categories.forEach((category) => {
+        if (data.role.length > 0) {
+          data.role.forEach((role) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                        <td>${category.id}</td>
-                        <td>${category.name}</td>
-                        <td>${category.slug}</td>
-                        <td>${
-                          category.parent_id
-                            ? data.categories.find(
-                                (cat) => cat.id === category.parent_id
-                              )?.name || "Không có"
-                            : "Không có"
-                        }</td>
+                        <td>${role.id}</td>
+                        <td>${role.name}</td>
+                        <td>${role.slug}</td>
+                  
                         <td>
-                            <button class="btn btn-warning" onclick="editCategory(${
-                              category.id
-                            }, '${category.name}', '${category.slug}', ${
-              category.parent_id
-            })">Edit</button>
-                            <button class="btn btn-danger" onclick="deleteCategory(${
-                              category.id
+                            <button class="btn btn-warning" onclick="editRole(${
+                              role.id
+                            }, '${role.name}', '${role.slug}')">Edit</button>
+                            <button class="btn btn-danger" onclick="deleteRole(${
+                              role.id
                             })">Delete</button>
                         </td>
                     `;
-            categoryTableBody.appendChild(row);
+            roleTableBody.appendChild(row);
           });
         } else {
-          categoryTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Không tìm thấy danh mục</td></tr>`;
+          roleTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Không tìm thấy role</td></tr>`;
         }
       } catch (error) {
         console.error("Lỗi tìm kiếm:", error);
@@ -426,11 +373,11 @@
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         const query = searchInput.value.trim();
-        fetchCategories(query);
+        fetchRoles(query);
       }, 300);
     });
 
-    fetchCategories();
+    fetchRoles();
   });
 </script>
 {{ end }}

@@ -33,7 +33,7 @@ func main() {
 	admin.RoleRoutes(r)
 
 	/* Auth */
-	auth.LoginRoutes(r)
+	auth.AuthRoutes(r)
 
 	//Pusher
 	r.GET("/send", config.SendEvent)

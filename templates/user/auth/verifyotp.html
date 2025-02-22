@@ -112,7 +112,7 @@
 
         if (response.ok) {
             Swal.fire("Thành công!", data.message, "success").then(() => {
-                window.location.href = "/";
+                window.location.href = "/loginvuphone";
             });
         } else {
             Swal.fire("Lỗi!", data.error || "OTP không hợp lệ", "error");

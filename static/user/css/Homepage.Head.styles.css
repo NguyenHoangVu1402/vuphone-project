@@ -29838,9 +29838,9 @@ input#termsofservice {
     .header-menu .header-links a.ico-wishlist {
         display: none;
     }
-    .header .account-desktop {
-        display: none;
-    }
+    /* .header .account-desktop {
+        
+    } */
     .header-menu ul.top-menu.mobile>li>a {
         display: block;
         min-height: 55px;

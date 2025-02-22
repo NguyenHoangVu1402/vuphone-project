@@ -19,32 +19,36 @@
                             </div>
                         </div>
                         <div class="returning-wrapper fieldset">
-                            <form method="post" autocomplete="off" action="/login?returnurl=%2Fcart">
+                            <form autocomplete="off" id="loginForm">
                                 <div class="page-title">
                                     <h1>Đăng nhập</h1>
                                 </div>
                                 <div class="form-fields">
-                                    <div class="inputs"><label for="Username">Tên đăng nhập:</label> <input
-                                            class="username" autofocus="" type="text" id="Username" name="Username">
-                                        <span class="field-validation-valid" data-valmsg-for="Username"
-                                            data-valmsg-replace="true"></span></div>
-                                    <div class="inputs"><label for="Password">Mật khẩu:</label> <input class="password"
-                                            type="password" id="Password" name="Password"> <span
-                                            class="field-validation-valid" data-valmsg-for="Password"
-                                            data-valmsg-replace="true"></span></div>
-                                    <div class="inputs reversed"><input type="checkbox" data-val="true"
-                                            data-val-required="The Nhớ mật khẩu field is required." id="RememberMe"
-                                            name="RememberMe" value="true"> <label for="RememberMe">Nhớ mật khẩu</label>
-                                        <span class="forgot-password"> <a href="/passwordrecoveryvuphone">Quên mật khẩu?</a>
-                                        </span></div>
+                                    <div class="inputs">
+                                        <label for="Username">Tên đăng nhập:</label>
+                                        <input class="username" autofocus type="text" id="Username" name="Username" required>
+                                    </div>
+                                    <div class="inputs">
+                                        <label for="Password">Mật khẩu:</label>
+                                        <input class="password" type="password" id="Password" name="Password" required>
+                                    </div>
+                                    <div class="inputs reversed">
+                                        <input type="checkbox" id="RememberMe"> 
+                                        <label for="RememberMe">Nhớ mật khẩu</label>
+                                        <span class="forgot-password">
+                                            <a href="/passwordrecoveryvuphone">Quên mật khẩu?</a>
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class="buttons"><button type="submit" class="button-1 login-button">Đăng
-                                        nhập</button></div>
-                                <div class="buttons-forgot"><label> Bạn chưa có tài khoản? </label> <button 
-                                        type="button" class="button-1 register-button"
-                                        onclick="window.location.href='/registervuphone'">Tạo
-                                        tài khoản ngay</button></div>
+                                <div class="buttons">
+                                    <button type="submit" class="button-1 login-button">Đăng nhập</button>
+                                </div>
+                                <div class="buttons-forgot">
+                                    <label>Bạn chưa có tài khoản?</label>
+                                    <button type="button" class="button-1 register-button" onclick="window.location.href='/registervuphone'">Tạo tài khoản ngay</button>
+                                </div>
                             </form>
+                            
                         </div>
                     </div>
                 </div>
@@ -92,6 +96,40 @@
         </ul>
     </div>
 </div>
-
-
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("loginForm");
+    
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+    
+            const username = document.getElementById("Username").value;
+            const password = document.getElementById("Password").value;
+    
+            fetch("/api/v1/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.access_token && data.refresh_token) {
+                    
+                    localStorage.setItem("access_token", data.access_token);
+                    localStorage.setItem("refresh_token", data.refresh_token);
+                    
+                    window.location.href = "/";
+                } else {
+                    alert(data.error); // Hiển thị lỗi nếu có
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+    </script>
 {{ end }}

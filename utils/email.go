@@ -166,7 +166,7 @@ func SendWelcomeEmail(toEmail, userName string) error {
         <h2>Xin chào %s,</h2>
         <p class="success">🎉 Tài khoản của bạn đã được kích hoạt thành công!</p>
         <p>Chúng tôi chúc bạn có trải nghiệm tốt nhất trên hệ thống của chúng tôi.</p>
-        <a href="https://vuphone.com" class="button">Truy cập ngay</a>
+        
         <p class="footer">Trân trọng,<br><strong>Đội ngũ Vuphone</strong></p>
     </div>
 

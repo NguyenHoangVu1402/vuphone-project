@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 	
-	"vuphone-project/utils" 
+
 
 	"github.com/gofrs/uuid"
 	"gorm.io/gorm"
@@ -39,15 +39,8 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 			return err
 		}
 	}
-
-	// Mã hóa mật khẩu trước khi lưu vào DB
-	hashedPassword, err := utils.HashPassword(u.Password)
-	if err != nil {
-		return err
-	}
-	u.Password = hashedPassword
-
-	return nil
+return nil
+	
 }
 
 

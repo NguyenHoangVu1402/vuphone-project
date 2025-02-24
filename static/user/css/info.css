@@ -76,15 +76,15 @@ input(41575,53): run-time error CSS1062: Expected semicolon or closing curly-bra
 @charset 'UTF-8';
 
 .slick-loading .slick-list {
-    background: #fff url(../lib_npm/slick/ajax-loader.gif) center center no-repeat
+    background: #fff url(/static/user/images/loading/loading-new.gif) center center no-repeat
 }
 
 @font-face {
     font-family: slick;
     font-weight: 400;
     font-style: normal;
-    src: url(../lib_npm/slick/fonts/slick.eot);
-    src: url(../lib_npm/slick/fonts/slick.eot?#iefix) format('embedded-opentype'),url(../lib_npm/slick/fonts/slick.woff) format('woff'),url(../lib_npm/slick/fonts/slick.ttf) format('truetype'),url(../lib_npm/slick/fonts/slick.svg#slick) format('svg')
+    src: url(/static/user/fonts/slick.eot);
+    src: url(/static/user/fonts/slick.eot?#iefix) format('embedded-opentype'), url(/static/user/fonts/slick.woff) format('woff'), url(/static/user/fonts/slick.ttf) format('truetype'), url(/static/user/fonts/slick.svg#slick) format('svg')
 }
 
 .slick-next, .slick-prev {
@@ -11429,7 +11429,7 @@ a:hover {
 }
 
     .chat-box_toggle.active {
-        background: url(/images/uploaded-source/icon/ic-contact-close.png) left center no-repeat;
+        background: url(/static/user/images/icons/ic-contact-close.png) left center no-repeat;
         background-position: 0;
         background-size: 56px 56px !important;
         height: 56px;
@@ -11439,7 +11439,7 @@ a:hover {
     }
 
 .chat-box_toggle {
-    background: url(/images/uploaded-source/icon/hotline.png) left center no-repeat;
+    background: url(/static/user/images/icons/hotline.png) left center no-repeat;
     background-position: 0;
     background-size: 56px 56px !important;
     height: 56px;
@@ -14488,7 +14488,7 @@ i.fa-solid.fa-arrow-right-to-bracket {
 }
 
 .header .search-icon {
-    background: url('/images/uploaded-source/icon/search-icon-1.png') left center no-repeat;
+    background: url('/static/user/images/icons/search-icon-1.png') left center no-repeat;
     background-position: 60%;
     padding: 15px 15px;
     font-size: 15px;
@@ -20345,9 +20345,9 @@ input#termsofservice {
             right: 15px;
         }
 
-        .page a.btn_buttom.popup_tragop::before, .page a.btn_buttom.thucu::before {
+        /* .page a.btn_buttom.popup_tragop::before, .page a.btn_buttom.thucu::before {
             content: unset;
-        }
+        } */
 
         .page .short-des .info_promotions ul li {
             margin-bottom: 15px;
@@ -21883,7 +21883,7 @@ input#termsofservice {
             min-width: 196px;
             -webkit-appearance: none;
             -moz-appearance: none;
-            background-image: url('/images/uploaded-source/icon/arrow-down.png');
+            background-image: url('/static/user/images/icons/arrow-down.png');
             background-size: 12px;
             background-repeat: no-repeat;
             background-position-x: 90%;
@@ -22145,7 +22145,7 @@ input#termsofservice {
         text-transform: capitalize;
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url('/images/uploaded-source/icon/arrow-down.png');
+        background-image: url('/static/user/images/icons/arrow-down.png');
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 84%;
@@ -23985,7 +23985,7 @@ button.button-1.password-recovery-button {
         min-width: 196px;
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 90%;
@@ -24505,7 +24505,7 @@ button.button-1.password-recovery-button {
         border-radius: 8px;
         margin-top: 12px;
         min-height: 38px;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 11px;
         background-repeat: no-repeat;
         background-position-x: 91%;
@@ -24844,7 +24844,7 @@ button.button-1.password-recovery-button {
     .html-address-edit-page .inputs select {
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 95%;
@@ -25051,7 +25051,7 @@ button.button-1.password-recovery-button {
     .html-shopping-cart-page select, .html-product-details-page select {
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 97%;
@@ -28233,7 +28233,7 @@ button.button-1.password-recovery-button {
         right: 8px;
         -webkit-appearance: none;
         -moz-appearance: none;
-        background-image: url(/images/uploaded-source/icon/arrow-down.png);
+        background-image: url(/static/user/images/icons/arrow-down.png);
         background-size: 12px;
         background-repeat: no-repeat;
         background-position-x: 90%;
@@ -30544,7 +30544,7 @@ html.html-product-installment-old.html-product-installment-credit .overview {
     z-index: 9999;
     width: 100vw;
     height: 100vh;
-    background: #5c5c5c url(../Themes/SD/Content/images/loading-new.gif) center no-repeat;
+    background: #5c5c5c url(/static/user/images/loading/loading-new.gif) center no-repeat;
     background-size: 50px;
     top: 0;
     left: 0;
@@ -32972,7 +32972,7 @@ label, label + * {
         z-index: 9999;
         width: 100vw;
         height: 100vh;
-        background: #5c5c5c url(../Themes/SD/Content/images/loading-new.gif) center no-repeat;
+        background: #5c5c5c url(/static/user/images/loading/loading-new.gif) center no-repeat;
         background-size: 50px;
         top: 0;
         left: 0;
@@ -40283,7 +40283,7 @@ label, label + * {
 .customer-info-page .inputs select {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 90%;
@@ -40326,7 +40326,7 @@ textarea:focus-visible {
     z-index: 9999;
     width: 100vw;
     height: 100vh;
-    background: #5c5c5c url(../Themes/SD/Content/images/loading-new.gif) center no-repeat;
+    background: #5c5c5c url(/static/user/images/loading/loading-new.gif) center no-repeat;
     background-size: 50px;
     top: 0;
     opacity: 0.7;
@@ -40337,7 +40337,7 @@ textarea:focus-visible {
     width: 100%;
     height: 160px;
     /* background: transparent url(../Themes/SD/Content/images/loading.gif) center no-repeat; */
-    background: #5c5c5c url(../Themes/SD/Content/images/loading-new.gif) center no-repeat;
+    background: #5c5c5c url(/static/user/images/loading/loading-new.gif) center no-repeat;
     background-size: 50px;
 
 }
@@ -40946,7 +40946,7 @@ html .all_popup-workshop .btn-primary {
 .workshop-page-detail select {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url(/images/uploaded-source/icon/arrow-down.png);
+    background-image: url(/static/user/images/icons/arrow-down.png);
     background-size: 12px;
     background-repeat: no-repeat;
     background-position-x: 96%;

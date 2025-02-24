@@ -98,38 +98,46 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("loginForm");
-    
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-    
-            const username = document.getElementById("Username").value;
-            const password = document.getElementById("Password").value;
-    
-            fetch("/api/v1/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
+            const form = document.getElementById("loginForm");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const username = document.getElementById("Username").value;
+                const password = document.getElementById("Password").value;
+                
+                fetch("/api/v1/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.access_token && data.refresh_token) {
-                    
-                    localStorage.setItem("access_token", data.access_token);
-                    localStorage.setItem("refresh_token", data.refresh_token);
-                    
-                    window.location.href = "/";
-                } else {
-                    alert(data.error); // Hiển thị lỗi nếu có
-                }
-            })
-            .catch(error => console.error("Error:", error));
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.error || 'Lỗi đăng nhập'); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Login response:', data); // Debug response
+                    if (data.access_token && data.refresh_token) {
+                        localStorage.setItem("access_token", data.access_token);
+                        localStorage.setItem("refresh_token", data.refresh_token);
+                        const url = data.url;
+                        window.location.href = url; // Điều hướng tới URL trong response
+                    } else {
+                        alert(data.error || "Đăng nhập thất bại");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert(error.message);
+                });
+            });
         });
-    });
     </script>
 {{ end }}

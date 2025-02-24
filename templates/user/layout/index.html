@@ -6,7 +6,8 @@
    <title>{{ .Title }}</title>
    <meta charset=UTF-8>
    <link rel=apple-touch-icon sizes=180x180 href="/static/user/images/icons/favicon.ico">
-   <link rel=stylesheet href="/static/user/css/Homepage.Head.styles.css">
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="/static/user/css/popupinfoaccount.css">
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5D8BL4TW"></script>
    <link rel="shortcut icon" href=/static/user/images/icons/favicon.ico>
    <script src="/static/user/js/Homepage.Head.scripts.js"></script>
@@ -148,35 +149,7 @@
                         <li id="topcartlink"><a href="/cart" class="ico-cart"> <span class="cart-label">Giỏ hàng</span> <span class="cart-qty">0</span> </a></li>
                     </ul>
                   </div>
-                  <div class="block block-account-navigation customer-navigation">
-                     <div class=title><strong>Tài khoản của tôi</strong></div>
-                     <div class=listbox>
-                        <ul class=list>
-                           <li class="customer-info active"><a href=/customer/info>Th&#xF4;ng tin t&#xE0;i
-                                 kho&#x1EA3;n</a>
-                           <li class="customer-addresses inactive"><a href=/customer/addresses>&#x110;&#x1ECB;a
-                                 ch&#x1EC9; nh&#x1EAD;n h&#xE0;ng</a>
-                           <li class="customer-orders inactive"><a href=/order/history>&#x110;&#x1A1;n
-                                 &#x111;&#x1EB7;t h&#xE0;ng</a>
-                           <li class="customer-my-system inactive"><a href=/customer/my-system>H&#x1EC7;
-                                 th&#x1ED1;ng</a>
-                           <li class="downloadable-products inactive"><a href=/customer/downloadableproducts>S&#x1EA3;n
-                                 ph&#x1EA9;m c&#xF3;
-                                 th&#x1EC3; t&#x1EA3;i xu&#x1ED1;ng</a>
-                           <li class="back-in-stock-subscriptions inactive"><a
-                                 href=/backinstocksubscriptions/manage>&#x110;&#x103;ng k&#xFD; nh&#x1EAD;n
-                                 tin khi h&#xE0;ng v&#x1EC1;</a>
-                           <li class="reward-points inactive"><a href=/rewardpoints/history>&#x110;i&#x1EC3;m
-                                 th&#x1B0;&#x1EDF;ng</a>
-                           <li class="change-password inactive"><a href=/customer/changepassword>&#x110;&#x1ED5;i
-                                 m&#x1EAD;t kh&#x1EA9;u</a>
-                           <li class="customer-avatar inactive"><a href=/customer/avatar>&#x1EA2;nh
-                                 &#x111;&#x1EA1;i di&#x1EC7;n</a>
-                           <li class="customer-reviews inactive"><a href=/customer/productreviews>L&#x1ECB;ch
-                                 s&#x1EED; &#x111;&#xE1;nh gi&#xE1; s&#x1EA3;n ph&#x1EA9;m</a>
-                        </ul>
-                     </div>
-                  </div>
+                  
                   <li class=category-menu-items>
                      <a href=/apple-care> Apple Care </a>
                      <div class=sublist-toggle></div>
@@ -608,7 +581,7 @@
                         <a href="/loginvuphone" class="ico-login">Đăng nhập</a>
                      </li>
                      <li class="ss_CustomerInfo " id="info"><i class="fa-solid fa-circle-user"></i>
-                        <a href="#" class="ico-account">Tài khoản của tôi</a>
+                        <a onclick="openPopupInfoAccount()" class="ico-account">Tài khoản của tôi</a>
                      </li>
                      <li class="ss_CustomerInfo " id="dangxuat"><i class="fa-solid fa-circle-user"></i>
                         <a href="" class="ico-logout" id="ico-logout">Đăng xuất</a>
@@ -712,35 +685,6 @@
                      <li class="li_ico-wishlist"><a href="/wishlist" class="ico-wishlist"> <span class="wishlist-label">Danh sách yêu thích</span> <span class="wishlist-qty">(0)</span> </a></li>
                      <li id="topcartlink"><a href="/cart" class="ico-cart"> <span class="cart-label">Giỏ hàng</span> <span class="cart-qty">0</span> </a></li>
                  </ul>
-               </div>
-               <div class="block block-account-navigation customer-navigation">
-                  <div class=title><strong>Tài khoản của tôi</strong></div>
-                  <div class=listbox>
-                     <ul class=list>
-                        <li class="customer-info active"><a href=/customer/info>Th&#xF4;ng tin t&#xE0;i
-                              kho&#x1EA3;n</a>
-                        <li class="customer-addresses inactive"><a href=/customer/addresses>&#x110;&#x1ECB;a
-                              ch&#x1EC9; nh&#x1EAD;n h&#xE0;ng</a>
-                        <li class="customer-orders inactive"><a href=/order/history>&#x110;&#x1A1;n
-                              &#x111;&#x1EB7;t h&#xE0;ng</a>
-                        <li class="customer-my-system inactive"><a href=/customer/my-system>H&#x1EC7;
-                              th&#x1ED1;ng</a>
-                        <li class="downloadable-products inactive"><a href=/customer/downloadableproducts>S&#x1EA3;n
-                              ph&#x1EA9;m c&#xF3; th&#x1EC3;
-                              t&#x1EA3;i xu&#x1ED1;ng</a>
-                        <li class="back-in-stock-subscriptions inactive"><a
-                              href=/backinstocksubscriptions/manage>&#x110;&#x103;ng k&#xFD; nh&#x1EAD;n tin
-                              khi h&#xE0;ng v&#x1EC1;</a>
-                        <li class="reward-points inactive"><a href=/rewardpoints/history>&#x110;i&#x1EC3;m
-                              th&#x1B0;&#x1EDF;ng</a>
-                        <li class="change-password inactive"><a href=/customer/changepassword>&#x110;&#x1ED5;i
-                              m&#x1EAD;t kh&#x1EA9;u</a>
-                        <li class="customer-avatar inactive"><a href=/customer/avatar>&#x1EA2;nh
-                              &#x111;&#x1EA1;i di&#x1EC7;n</a>
-                        <li class="customer-reviews inactive"><a href=/customer/productreviews>L&#x1ECB;ch
-                              s&#x1EED; &#x111;&#xE1;nh gi&#xE1; s&#x1EA3;n ph&#x1EA9;m</a>
-                     </ul>
-                  </div>
                </div>
                <li class=category-menu-items>
                   <a href=/apple-care> Apple Care </a>
@@ -1282,7 +1226,313 @@
          </div>
       </div>
    </div>
-   
+
+   <div class="popup-overlay" id="popupInfoAccount">
+      <div class="popup-content">
+         <button class="close-btn" onclick="closePopupInfoAccount()">x</button>
+         <h2>Thông tin cá nhân</h2>
+         <form id="popupForm">
+            <div class="form-group">
+               <label for="username">Tên đăng nhập:</label>
+               <span id="username"></span>
+           </div>
+            <div class="form-group">
+               <label for="name">Họ và tên:</label>
+               <input type="text" id="name" name="name" placeholder="Nhập họ và tên" required>
+            </div>
+            <div class="form-group">
+               <label>Giới tính:</label>
+               <div class="radio-group">
+                   <label><input type="radio" name="gender" value="Nam" required> Nam</label>
+                   <label><input type="radio" name="gender" value="Nữ"> Nữ</label>
+               </div>
+           </div>
+           <div class="form-group">
+               <label for="birth_date">Ngày sinh:</label>
+               <input type="date" id="birth_date" name="birth_date" required>
+           </div>
+           <div class="form-group">
+               <label for="email">Email:</label>
+               <input type="email" id="email" name="email" placeholder="Nhập email" required>
+           </div>
+           <div class="form-group">
+               <label for="phone">Số điện thoại:</label>
+               <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
+           </div>
+           
+           <div class="form-group">
+               <label for="points">Điểm:</label>
+               <input type="number" id="points" name="points" value="0" readonly>
+           </div>
+           <div class="form-group">
+               <label for="avatar">Ảnh đại diện:</label>
+               <input type="file" id="avatar" name="avatar" accept="image/*">
+               <img id="avatarPreview" src="#" alt="Ảnh xem trước">
+           </div>
+           <div class="btn-container">
+               <button type="submit" class="popup-btn">Cập nhật</button>
+           </div>
+         </form>
+      </div>
+   </div>
+
+   <script>
+      // Hàm làm mới token
+      function refreshToken() {
+          const refreshToken = localStorage.getItem('refresh_token');
+          console.log('Refreshing token with:', refreshToken);
+          if (!refreshToken) {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Lỗi',
+                  text: 'Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!',
+                  timer: 2000,
+                  timerProgressBar: true,
+                  showConfirmButton: false
+              });
+              return Promise.reject('No refresh token');
+          }
+  
+          return fetch('/api/v1/auth/refresh-token', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ refresh_token: refreshToken })
+          })
+          .then(response => {
+              console.log('Refresh response:', response);
+              if (!response.ok) {
+                  throw new Error('Không thể làm mới token');
+              }
+              return response.json();
+          })
+          .then(data => {
+              console.log('New tokens:', data);
+              localStorage.setItem('access_token', data.access_token);
+              localStorage.setItem('refresh_token', data.refresh_token || refreshToken);
+              return data.access_token;
+          });
+      }
+  
+      // Hàm gọi API lấy thông tin
+      function fetchCustomerInfo() {
+          const accessToken = localStorage.getItem('access_token');
+          console.log('Access Token:', accessToken);
+          if (!accessToken) {
+              Swal.fire({
+                  icon: 'warning',
+                  title: 'Chưa đăng nhập',
+                  text: 'Vui lòng đăng nhập để xem thông tin tài khoản!',
+                  timer: 2000,
+                  timerProgressBar: true,
+                  showConfirmButton: false
+              });
+              return Promise.reject('No access token');
+          }
+  
+          return fetch('/api/v1/auth/customer/info', {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${accessToken}`
+              }
+          })
+          .then(response => {
+              console.log('API response status:', response.status);
+              if (!response.ok) {
+                  if (response.status === 401) {
+                      console.log('Token expired, refreshing...');
+                      return refreshToken().then(newAccessToken => {
+                          console.log('New Access Token:', newAccessToken);
+                          return fetch('/api/v1/auth/customer/info', {
+                              method: 'GET',
+                              headers: {
+                                  'Content-Type': 'application/json',
+                                  'Authorization': `Bearer ${newAccessToken}`
+                              }
+                          });
+                      });
+                  }
+                  return response.json().then(err => { throw new Error(err.error || 'Lỗi không xác định'); });
+              }
+              return response.json();
+          });
+      }
+  
+      // Hàm mở popup và hiển thị thông tin
+      function openPopupInfoAccount() {
+          fetchCustomerInfo()
+              .then(data => {
+                  console.log('Received data:', data);
+                  document.getElementById('username').textContent = data.username || '';
+                  document.getElementById('name').value = data.name || '';
+                  document.getElementById('email').value = data.email || '';
+                  document.getElementById('phone').value = data.phone || '';
+                  document.getElementById('birth_date').value = data.birth_date || '';
+                  document.getElementById('points').value = data.points || 0;
+  
+                  const genderRadios = document.getElementsByName('gender');
+                  genderRadios.forEach(radio => {
+                      radio.checked = (radio.value === data.gender);
+                  });
+  
+                  const preview = document.getElementById('avatarPreview');
+                  if (data.avatar) {
+                      preview.src = data.avatar;
+                      preview.style.display = 'block';
+                  } else {
+                      preview.style.display = 'none';
+                  }
+  
+                  document.getElementById('popupInfoAccount').classList.add('active');
+              })
+              .catch(error => {
+                  console.error('Lỗi:', error);
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Lỗi',
+                      text: 'Không thể tải thông tin tài khoản: ' + error.message,
+                      timer: 2000,
+                      timerProgressBar: true,
+                      showConfirmButton: false
+                  });
+              });
+      }
+  
+      // Hàm đóng popup
+      function closePopupInfoAccount() {
+          document.getElementById('popupInfoAccount').classList.remove('active');
+          document.getElementById('avatarPreview').style.display = 'none';
+      }
+  
+      // Hàm gửi yêu cầu cập nhật profile
+      function updateProfile(event) {
+          event.preventDefault(); // Ngăn form submit mặc định
+  
+          const accessToken = localStorage.getItem('access_token');
+          if (!accessToken) {
+              Swal.fire({
+                  icon: 'warning',
+                  title: 'Chưa đăng nhập',
+                  text: 'Vui lòng đăng nhập để cập nhật thông tin!',
+                  timer: 2000,
+                  timerProgressBar: true,
+                  showConfirmButton: false
+              });
+              return;
+          }
+  
+          // Thu thập dữ liệu từ form
+          const formData = {
+              name: document.getElementById('name').value,
+              gender: document.querySelector('input[name="gender"]:checked')?.value || '',
+              birth_date: document.getElementById('birth_date').value,
+              email: document.getElementById('email').value,
+              phone: document.getElementById('phone').value,
+              avatar: ''
+          };
+  
+          // Kiểm tra dữ liệu đầu vào cơ bản
+          if (!formData.name || !formData.gender || !formData.birth_date || !formData.email || !formData.phone) {
+              Swal.fire({
+                  icon: 'warning',
+                  title: 'Thiếu thông tin',
+                  text: 'Vui lòng điền đầy đủ thông tin bắt buộc!',
+                  timer: 2000,
+                  timerProgressBar: true,
+                  showConfirmButton: false
+              });
+              return;
+          }
+  
+          // Xử lý ảnh đại diện (nếu có)
+          const avatarInput = document.getElementById('avatar');
+          if (avatarInput.files[0]) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                  formData.avatar = e.target.result; // Chuỗi Base64
+                  sendUpdateRequest(formData, accessToken);
+              };
+              reader.readAsDataURL(avatarInput.files[0]);
+          } else {
+              sendUpdateRequest(formData, accessToken); // Gửi mà không có avatar mới
+          }
+      }
+  
+      // Gửi yêu cầu PUT tới API
+      function sendUpdateRequest(formData, accessToken) {
+          fetch('/api/v1/auth/customer/update-info', { // Sửa lại endpoint cho đúng với API của bạn
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${accessToken}`
+              },
+              body: JSON.stringify(formData)
+          })
+          .then(response => {
+              if (!response.ok) {
+                  if (response.status === 401) { // Token hết hạn
+                      return refreshToken().then(newAccessToken => {
+                          return fetch('/api/v1/auth/customer/update-info', {
+                              method: 'PUT',
+                              headers: {
+                                  'Content-Type': 'application/json',
+                                  'Authorization': `Bearer ${newAccessToken}`
+                              },
+                              body: JSON.stringify(formData)
+                          });
+                      });
+                  }
+                  return response.json().then(err => { throw new Error(err.error || 'Cập nhật thất bại'); });
+              }
+              return response.json();
+          })
+          .then(data => {
+              console.log('Update response:', data);
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Thành công',
+                  text: data.message || 'Cập nhật thông tin thành công!',
+                  timer: 2000,
+                  timerProgressBar: true,
+                  showConfirmButton: false
+              });
+              closePopupInfoAccount(); // Đóng popup sau khi cập nhật
+          })
+          .catch(error => {
+              console.error('Lỗi cập nhật:', error);
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Lỗi',
+                  text: 'Có lỗi xảy ra: ' + error.message,
+                  timer: 2000,
+                  timerProgressBar: true,
+                  showConfirmButton: false
+              });
+          });
+      }
+  
+      // Xem trước ảnh khi upload
+      document.getElementById('avatar').addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          const preview = document.getElementById('avatarPreview');
+          if (file) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                  preview.src = e.target.result;
+                  preview.style.display = 'block';
+              };
+              reader.readAsDataURL(file);
+          } else {
+              preview.style.display = 'none';
+          }
+      });
+  
+      // Gắn sự kiện submit vào form
+      document.getElementById('popupForm').addEventListener('submit', updateProfile);
+  </script>
+
    <script>
       $(document).ready(function () {
     // Lấy access token & refresh token từ LocalStorage
@@ -1322,6 +1572,7 @@
 });
 
    </script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <script>
       document.addEventListener("DOMContentLoaded", function () {
           

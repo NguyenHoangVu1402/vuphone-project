@@ -1,19 +1,24 @@
 package api
 
 import (
+	"encoding/base64"
+	"log"
 	"net/http"
 	"time"
 	"vuphone-project/config"
 	"vuphone-project/models"
+    "vuphone-project/middleware"
 	"vuphone-project/utils"
-	"log"
-	"fmt"
-	"gorm.io/gorm"
+	"strings"
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid"
-	"encoding/base64"
-
+	"gorm.io/gorm"
+    "os"
+    "fmt"
+    "path/filepath"
 )
+
+
 
 // API lấy ngày
 func GetDays(c *gin.Context) {
@@ -239,137 +244,43 @@ func Login(c *gin.Context) {
     }
 
     // Tạo Access Token
-    accessToken, err := CreateAccessToken(user.ID, config.DB)
+    accessToken, err := middleware.CreateAccessToken(user.ID, config.DB)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Không thể tạo Access Token"})
         return
     }
 
     // Tạo Refresh Token
-    refreshToken, err := CreateRefreshToken(user.ID, config.DB)
+    refreshToken, err := middleware.CreateRefreshToken(user.ID, config.DB)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Không thể tạo Refresh Token"})
         return
     }
 
 
-    c.JSON(http.StatusOK, gin.H{
-		"message":      "Đăng nhập thành công!",
-		"access_token": accessToken,
-		"refresh_token": refreshToken,		
-	})
-}
-
-
-func CreateAccessToken(userID uuid.UUID, db *gorm.DB) (string, error) {
-	// Tạo access token mới
-	accessTokenUUID, err := uuid.NewV4()
-	if err != nil {
-		return "", err
-	}
-	accessToken := accessTokenUUID.String()
-	expiration := time.Now().Add(time.Minute * 15) // Token có hiệu lực trong 15 phút
-
-	// Lưu access token vào cơ sở dữ liệu
-	token := models.AccessToken{
-		UserID:      userID,
-		AccessToken: accessToken,
-		ExpiresAt:   expiration,
-	}
-
-	if err := db.Create(&token).Error; err != nil {
-		return "", err
-	}
-
-	return accessToken, nil
-}
-
-func CreateRefreshToken(userID uuid.UUID, db *gorm.DB) (string, error) {
-	// Generate a new UUID and handle the error
-	refreshUUID, err := uuid.NewV4()
-	if err != nil {
-		return "", err
-	}
-	refreshToken := refreshUUID.String()
-
-	// Set expiration for 7 days
-	expiration := time.Now().Add(time.Hour * 24 * 7)
-
-	// Save the refresh token to the database
-	token := models.RefreshToken{
-		UserID:       userID,
-		RefreshToken: refreshToken,
-		ExpiresAt:    expiration,
-	}
-
-	// Save the token to DB
-	if err := db.Create(&token).Error; err != nil {
-		return "", err
-	}
-
-	return refreshToken, nil
-}
-
-func ValidateAccessToken(accessToken string, db *gorm.DB) (*models.AccessToken, error) {
-	var token models.AccessToken
-	// Tìm access token trong cơ sở dữ liệu
-	if err := db.Where("access_token = ?", accessToken).First(&token).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, fmt.Errorf("access token không tồn tại")
-		}
-		return nil, err
-	}
-
-	// Kiểm tra thời gian hết hạn
-	if token.ExpiresAt.Before(time.Now()) {
-		return nil, fmt.Errorf("access token đã hết hạn")
-	}
-
-	return &token, nil
-}
-
-func RefreshAccessToken(c *gin.Context) {
-    var input struct {
-        RefreshToken string `json:"refresh_token" binding:"required"`
-    }
-
-    if err := c.ShouldBindJSON(&input); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Dữ liệu không hợp lệ"})
+    // Lấy thông tin Role từ RoleID
+    var role models.Role
+    if err := config.DB.Where("id = ?", user.RoleID).First(&role).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Không thể lấy thông tin Role"})
         return
     }
 
-    newAccessToken, err := refreshAccessToken(input.RefreshToken, config.DB)
-    if err != nil {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-        return
+    // So sánh Role.Name với "user"
+    if role.Name == "user" {
+        c.JSON(http.StatusOK, gin.H{
+            "message":      "Đăng nhập thành công!",
+            "access_token": accessToken,
+            "refresh_token": refreshToken,
+            "url":          "/",
+        })
+    } else {
+        c.JSON(http.StatusOK, gin.H{
+            "message":      "Đăng nhập thành công!",
+            "access_token": accessToken,
+            "refresh_token": refreshToken,
+            "url":          "/dashboard",
+        })
     }
-
-    c.JSON(http.StatusOK, gin.H{"access_token": newAccessToken})
-}
-
-func refreshAccessToken(refreshToken string, db *gorm.DB) (string, error) {
-    var token models.RefreshToken
-    if err := db.Where("refresh_token = ?", refreshToken).First(&token).Error; err != nil {
-        if err == gorm.ErrRecordNotFound {
-            return "", fmt.Errorf("refresh token không tồn tại")
-        }
-        return "", err
-    }
-
-    if token.ExpiresAt.Before(time.Now()) {
-        return "", fmt.Errorf("refresh token đã hết hạn")
-    }
-
-    accessToken, err := CreateAccessToken(token.UserID, db)
-    if err != nil {
-        return "", fmt.Errorf("không thể tạo Access Token mới: %v", err)
-    }
-
-    if err := db.Delete(&token).Error; err != nil {
-        return "", fmt.Errorf("không thể xóa Refresh Token cũ: %v", err)
-    }
-
-    return accessToken, nil
 }
 
 func Logout(c *gin.Context) {
@@ -400,24 +311,37 @@ func Logout(c *gin.Context) {
 
 
 func GetUserInfo(c *gin.Context) {
-	tokenString := c.Request.Header.Get("Authorization")
-
-	// Xác thực JWT token và lấy chi tiết người dùng
-	claims, err := utils.ValidateJWT(tokenString)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-        return
-	}
-
-	// Tra cứu thông tin người dùng từ cơ sở dữ liệu
-	var user models.User
-	if err := config.DB.Where("id = ?", claims.UserID).First(&user).Error; err != nil {
-        c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+    // Lấy token từ header
+    tokenString := c.Request.Header.Get("Authorization")
+    if tokenString == "" {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Token không được cung cấp"})
         return
     }
 
-	c.JSON(http.StatusOK, gin.H{
-		"id":         user.ID,
+    // Loại bỏ tiền tố "Bearer "
+    tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+    // Xác thực JWT token và lấy claims
+    claims, err := utils.ValidateJWT(tokenString)
+    if err != nil {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Token không hợp lệ"})
+        return
+    }
+
+    // Tra cứu thông tin người dùng từ cơ sở dữ liệu
+    var user models.User
+    if err := config.DB.Where("id = ?", claims.UserID).First(&user).Error; err != nil {
+        if err == gorm.ErrRecordNotFound {
+            c.JSON(http.StatusNotFound, gin.H{"error": "Người dùng không tồn tại"})
+        } else {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Lỗi khi truy vấn cơ sở dữ liệu"})
+        }
+        return
+    }
+
+    // Trả về thông tin người dùng
+    c.JSON(http.StatusOK, gin.H{
+        "id":         user.ID,
         "name":       user.Name,
         "username":   user.Username,
         "email":      user.Email,
@@ -427,5 +351,161 @@ func GetUserInfo(c *gin.Context) {
         "birth_date": user.BirthDate.Format("2006-01-02"),
         "gender":     user.Gender,
         "points":     user.Points,
+    })
+}
+
+// Hàm lưu avatar từ Base64 vào thư mục
+func saveAvatarFromBase64(base64Str string, userID string) (string, error) {
+	// Cắt chuỗi Base64 để lấy phần ảnh thực tế
+	parts := strings.Split(base64Str, ",")
+	if len(parts) != 2 {
+		return "", fmt.Errorf("invalid Base64 string")
+	}
+	base64Data := parts[1]
+
+	// Giải mã Base64
+	decoded, err := base64.StdEncoding.DecodeString(base64Data)
+	if err != nil {
+		return "", err
+	}
+
+	// Tạo tên file cho ảnh (ví dụ: userID_timestamps.png)
+	fileName := fmt.Sprintf("%s_%d.png", userID, time.Now().Unix())
+
+	// Đường dẫn lưu ảnh
+	savePath := filepath.Join("static", "user", "images", "avatar", fileName)
+
+	// Tạo thư mục nếu chưa tồn tại
+	err = os.MkdirAll(filepath.Dir(savePath), os.ModePerm)
+	if err != nil {
+		return "", err
+	}
+
+	// Lưu ảnh vào file
+	err = os.WriteFile(savePath, decoded, 0644)
+	if err != nil {
+		return "", err
+	}
+
+	// Trả về đường dẫn ảnh đã lưu
+	return "/static/user/images/avatar/" + fileName, nil
+}
+// Cấu trúc dữ liệu cho request body
+type UpdateProfileRequest struct {
+	Name      string `json:"name" binding:"required"`
+	Gender    string `json:"gender" binding:"required,oneof=Nam Nữ"`
+	BirthDate string `json:"birth_date" binding:"required"`
+	Email     string `json:"email" binding:"required,email"`
+	Phone     string `json:"phone" binding:"required"`
+	Avatar    string `json:"avatar"` // Chuỗi Base64 hoặc URL
+}
+
+// UpdateProfile - Cập nhật thông tin hồ sơ người dùng
+func UpdateProfile(c *gin.Context) {
+	// Lấy token từ header
+	tokenString := c.Request.Header.Get("Authorization")
+	if tokenString == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token không được cung cấp"})
+		return
+	}
+
+	// Loại bỏ tiền tố "Bearer "
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+	// Xác thực JWT token và lấy claims
+	claims, err := utils.ValidateJWT(tokenString)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token không hợp lệ"})
+		return
+	}
+
+	// Lấy thông tin người dùng từ database
+	var user models.User
+	if err := config.DB.Where("id = ?", claims.UserID).First(&user).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Người dùng không tồn tại"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Lỗi khi truy vấn cơ sở dữ liệu"})
+		}
+		return
+	}
+
+	// Parse dữ liệu từ request body
+	var req UpdateProfileRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		log.Println("Lỗi bind JSON:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Dữ liệu không hợp lệ: " + err.Error()})
+		return
+	}
+
+	// Kiểm tra định dạng ngày sinh
+	birthDate, err := time.Parse("2006-01-02", req.BirthDate)
+	if err != nil {
+		log.Println("Lỗi parse ngày sinh:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Định dạng ngày sinh không hợp lệ, hãy sử dụng YYYY-MM-DD"})
+		return
+	}
+
+	// Kiểm tra email đã tồn tại (trừ email của chính user hiện tại)
+	var existingEmailUser models.User
+	if err := config.DB.Where("email = ? AND id != ?", req.Email, user.ID).First(&existingEmailUser).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email đã được sử dụng bởi người dùng khác"})
+		return
+	}
+
+	// Kiểm tra số điện thoại đã tồn tại (trừ số điện thoại của chính user hiện tại)
+	var existingPhoneUser models.User
+	if err := config.DB.Where("phone = ? AND id != ?", req.Phone, user.ID).First(&existingPhoneUser).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Số điện thoại đã được sử dụng bởi người dùng khác"})
+		return
+	}
+
+	// Xử lý ảnh đại diện (nếu có)
+	avatar := user.Avatar // Giữ nguyên avatar cũ nếu không có thay đổi
+if req.Avatar != "" {
+	// Nếu avatar là chuỗi Base64, xử lý lưu ảnh vào thư mục
+	if strings.HasPrefix(req.Avatar, "data:image") {
+		// Giải mã Base64 và lưu ảnh vào thư mục
+		filePath, err := saveAvatarFromBase64(req.Avatar, user.ID.String()) // Chuyển UUID thành string
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Lỗi khi lưu avatar"})
+			return
+		}
+		// Cập nhật đường dẫn avatar mới
+		avatar = filePath
+	} else {
+		// Nếu avatar là URL, gán thẳng
+		avatar = req.Avatar
+	}
+}
+
+	// Cập nhật thông tin người dùng
+	user.Name = req.Name
+	user.Gender = req.Gender
+	user.BirthDate = birthDate
+	user.Email = req.Email
+	user.Phone = req.Phone
+	user.Avatar = avatar
+
+	if err := config.DB.Save(&user).Error; err != nil {
+		log.Println("Lỗi khi cập nhật user:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Không thể cập nhật thông tin"})
+		return
+	}
+
+	// Trả về thông tin đã cập nhật
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Cập nhật thông tin thành công",
+		"data": gin.H{
+			"id":         user.ID,
+			"name":       user.Name,
+			"username":   user.Username,
+			"email":      user.Email,
+			"phone":      user.Phone,
+			"birth_date": user.BirthDate.Format("2006-01-02"),
+			"gender":     user.Gender,
+			"avatar":     user.Avatar,
+			"points":     user.Points,
+		},
 	})
 }

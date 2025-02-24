@@ -43,9 +43,10 @@ func AuthRoutes(r *gin.Engine) {
 
 		//Info account
 		authGroup.GET("/customer/info", api.GetUserInfo) // Lấy thông tin tài khoản
-		
+		//Update info account
+		authGroup.PUT("/customer/update-info", api.UpdateProfile) // Cập nhật thông tin tài khoản
 		// Refresh token
-        authGroup.POST("/refresh-token", api.RefreshAccessToken) // Làm mới Access Token bằng Refresh Token
+        authGroup.POST("/refresh-token", middleware.RefreshAccessToken) // Làm mới Access Token bằng Refresh Token
 	}
 
 	// Middleware xác thực
